@@ -1,0 +1,2955 @@
+{
+"season": "2024/25",
+"giornate": 38,
+"managers": [
+{
+"canon": "MARCO",
+"name": "MARCO",
+"team": "Anche quest'anno...vinco l'anno prossimo"
+},
+{
+"canon": "FABIO",
+"name": "FABIO",
+"team": "Scudettoinfaccia"
+},
+{
+"canon": "SALVO",
+"name": "SALVO",
+"team": "A.C. Mondelliana"
+},
+{
+"canon": "GREG",
+"name": "GREG",
+"team": "A Settembre sparisco FC"
+},
+{
+"canon": "DOMENICO",
+"name": "DOMENICO",
+"team": "Reijnders F.C."
+},
+{
+"canon": "MARIO & AMEDEO",
+"name": "MARIO & AMEDEO",
+"team": "Masterchef FC"
+},
+{
+"canon": "ALE & MAX",
+"name": "ALE&MAX",
+"team": "I Bamboli Sui Cammelli"
+},
+{
+"canon": "SANTORO",
+"name": "SANTORO",
+"team": "Marco’s Angels"
+},
+{
+"canon": "GIANNI",
+"name": "GIANNI",
+"team": "GC 19"
+},
+{
+"canon": "ROBERTO",
+"name": "ROBERTO",
+"team": "Vis Conzo F.C."
+}
+],
+"championship": {
+"finalStanding": [
+{
+"pos": 1,
+"canon": "MARCO",
+"name": "MARCO",
+"total": 2781.5
+},
+{
+"pos": 2,
+"canon": "FABIO",
+"name": "FABIO",
+"total": 2714
+},
+{
+"pos": 3,
+"canon": "SALVO",
+"name": "SALVO",
+"total": 2707.5
+},
+{
+"pos": 4,
+"canon": "GREG",
+"name": "GREG",
+"total": 2673.5
+},
+{
+"pos": 5,
+"canon": "DOMENICO",
+"name": "DOMENICO",
+"total": 2669.5
+},
+{
+"pos": 6,
+"canon": "MARIO & AMEDEO",
+"name": "MARIO & AMEDEO",
+"total": 2662.5
+},
+{
+"pos": 7,
+"canon": "ALE & MAX",
+"name": "ALE&MAX",
+"total": 2652.5
+},
+{
+"pos": 8,
+"canon": "SANTORO",
+"name": "SANTORO",
+"total": 2627.5
+},
+{
+"pos": 9,
+"canon": "GIANNI",
+"name": "GIANNI",
+"total": 2625
+},
+{
+"pos": 10,
+"canon": "ROBERTO",
+"name": "ROBERTO",
+"total": 2603
+}
+],
+"scores": {
+"MARCO": [
+59,
+73.5,
+68,
+78.5,
+76,
+67,
+78,
+81,
+75,
+72.5,
+70,
+65.5,
+81,
+64,
+68,
+76.5,
+71.5,
+76,
+73,
+76.5,
+77,
+75,
+63,
+90,
+68.5,
+69.5,
+76.5,
+83.5,
+69.5,
+76.5,
+69,
+70,
+71,
+78.5,
+74.5,
+69,
+80,
+70
+],
+"FABIO": [
+75.5,
+69,
+83.5,
+67.5,
+71,
+68,
+79,
+73.5,
+65,
+80.5,
+66.5,
+72,
+71,
+70.5,
+76,
+77,
+77.5,
+70,
+71.5,
+65,
+76.5,
+71.5,
+69.5,
+74,
+67,
+64.5,
+72.5,
+68,
+72.5,
+67.5,
+67.5,
+75.5,
+67.5,
+73.5,
+63.5,
+73,
+76,
+64.5
+],
+"SALVO": [
+68,
+69,
+69,
+79,
+71,
+76,
+66.5,
+75.5,
+69,
+75,
+71.5,
+88.5,
+69.5,
+67,
+60.5,
+68.5,
+70.5,
+70,
+67.5,
+62,
+69.5,
+72.5,
+82.5,
+78.5,
+79,
+67.5,
+74,
+67.5,
+67,
+66.5,
+68.5,
+72,
+73.5,
+67,
+72.5,
+75.5,
+60,
+80.5
+],
+"GREG": [
+73.5,
+66.5,
+59,
+71.5,
+69,
+79,
+73,
+76.5,
+69,
+72,
+70,
+89,
+77.5,
+70,
+68.5,
+62,
+74,
+67,
+71,
+65.5,
+75.5,
+68.5,
+78,
+72.5,
+70,
+68,
+69,
+58,
+67,
+68,
+72,
+73.5,
+79,
+62.5,
+65.5,
+54,
+76,
+73
+],
+"DOMENICO": [
+63,
+76,
+67,
+66.5,
+72,
+70,
+75.5,
+64,
+72.5,
+68.5,
+74.5,
+66,
+72,
+77.5,
+72,
+75.5,
+74,
+66,
+67.5,
+68.5,
+75.5,
+77.5,
+67.5,
+65,
+67,
+66,
+67,
+74,
+71.5,
+64.5,
+64.5,
+74.5,
+66,
+69.5,
+62,
+68,
+76,
+85
+],
+"MARIO & AMEDEO": [
+63.5,
+63.5,
+73,
+73,
+70.5,
+70.5,
+60.5,
+73.5,
+62.5,
+79.5,
+67.5,
+73,
+69,
+73,
+75,
+70,
+74.5,
+70,
+74,
+67,
+75,
+73,
+71.5,
+71,
+66,
+74.5,
+72,
+62.5,
+69.5,
+65,
+64,
+77.5,
+73.5,
+68,
+72.5,
+75.5,
+61,
+67.5
+],
+"ALE & MAX": [
+75,
+61,
+67.5,
+74.5,
+75,
+77,
+65,
+63.5,
+80.5,
+64,
+73,
+62.5,
+71,
+70,
+71.5,
+63,
+72.5,
+74,
+70.5,
+72,
+75.5,
+58.5,
+65,
+69.5,
+72,
+78.5,
+61,
+74,
+73.5,
+68.5,
+68,
+68,
+65,
+62.5,
+69,
+71.5,
+83.5,
+66
+],
+"SANTORO": [
+68.5,
+65.5,
+70.5,
+75,
+67.5,
+66.5,
+70,
+56.5,
+77,
+80.5,
+61,
+61,
+72.5,
+68,
+71.5,
+68.5,
+68.5,
+67,
+74,
+69,
+78,
+74,
+72,
+62.5,
+67.5,
+71.5,
+67,
+70,
+68,
+68,
+63.5,
+78.5,
+67,
+66.5,
+74,
+72,
+64,
+65
+],
+"GIANNI": [
+73,
+80,
+69.5,
+67,
+68.5,
+81,
+74.5,
+62,
+68,
+72,
+59,
+67,
+64.5,
+62.5,
+76,
+72,
+78,
+66,
+71.5,
+65.5,
+67.5,
+74.5,
+71.5,
+68,
+61,
+74.5,
+64,
+67,
+68,
+67.5,
+67,
+68.5,
+66.5,
+66,
+69,
+67,
+73,
+67
+],
+"ROBERTO": [
+73.5,
+51,
+61.5,
+68,
+67,
+65.5,
+80,
+68.5,
+74,
+72.5,
+67,
+76,
+70,
+68.5,
+63.5,
+65,
+69.5,
+60.5,
+76.5,
+68,
+72.5,
+70,
+58.5,
+76,
+63,
+68.5,
+69,
+69,
+73,
+69,
+69,
+79,
+76,
+63,
+68,
+66.5,
+61,
+66
+]
+}
+},
+"cup": {
+"standing": [
+{
+"canon": "FABIO",
+"name": "FABIO",
+"points": 34,
+"gf": 27,
+"gs": 19,
+"dr": 8,
+"w": 9,
+"d": 7,
+"l": 2
+},
+{
+"canon": "SALVO",
+"name": "SALVO",
+"points": 27,
+"gf": 22,
+"gs": 20,
+"dr": 2,
+"w": 7,
+"d": 6,
+"l": 5
+},
+{
+"canon": "MARCO",
+"name": "MARCO",
+"points": 26,
+"gf": 27,
+"gs": 25,
+"dr": 2,
+"w": 6,
+"d": 8,
+"l": 4
+},
+{
+"canon": "MARIO & AMEDEO",
+"name": "MARIO&AMEDEO",
+"points": 26,
+"gf": 18,
+"gs": 17,
+"dr": 1,
+"w": 7,
+"d": 5,
+"l": 6
+},
+{
+"canon": "DOMENICO",
+"name": "DOMENICO",
+"points": 25,
+"gf": 24,
+"gs": 21,
+"dr": 3,
+"w": 6,
+"d": 7,
+"l": 5
+},
+{
+"canon": "ALE & MAX",
+"name": "ALE&MAX",
+"points": 23,
+"gf": 23,
+"gs": 22,
+"dr": 1,
+"w": 5,
+"d": 8,
+"l": 5
+},
+{
+"canon": "GIANNI",
+"name": "GIANNI",
+"points": 22,
+"gf": 21,
+"gs": 22,
+"dr": -1,
+"w": 6,
+"d": 4,
+"l": 8
+},
+{
+"canon": "ROBERTO",
+"name": "ROBERTO",
+"points": 21,
+"gf": 20,
+"gs": 25,
+"dr": -5,
+"w": 6,
+"d": 3,
+"l": 9
+},
+{
+"canon": "GREG",
+"name": "GREG",
+"points": 19,
+"gf": 25,
+"gs": 28,
+"dr": -3,
+"w": 4,
+"d": 7,
+"l": 7
+},
+{
+"canon": "SANTORO",
+"name": "SANTORO",
+"points": 17,
+"gf": 20,
+"gs": 28,
+"dr": -8,
+"w": 4,
+"d": 5,
+"l": 9
+}
+],
+"matches": [
+{
+"md": 1,
+"home": "Domenico",
+"homeCanon": "DOMENICO",
+"away": "Ale&Max",
+"awayCanon": "ALE & MAX",
+"gh": 0,
+"ga": 2
+},
+{
+"md": 17,
+"home": "Ale&Max",
+"homeCanon": "ALE & MAX",
+"away": "Domenico",
+"awayCanon": "DOMENICO",
+"gh": 2,
+"ga": 2
+},
+{
+"md": 9,
+"home": "Greg",
+"homeCanon": "GREG",
+"away": "Salvo",
+"awayCanon": "SALVO",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 27,
+"home": "Salvo",
+"homeCanon": "SALVO",
+"away": "Greg",
+"awayCanon": "GREG",
+"gh": 2,
+"ga": 1
+},
+{
+"md": 1,
+"home": "Gianni",
+"homeCanon": "GIANNI",
+"away": "Marco",
+"awayCanon": "MARCO",
+"gh": 2,
+"ga": 0
+},
+{
+"md": 17,
+"home": "Marco",
+"homeCanon": "MARCO",
+"away": "Gianni",
+"awayCanon": "GIANNI",
+"gh": 1,
+"ga": 3
+},
+{
+"md": 9,
+"home": "Roberto",
+"homeCanon": "ROBERTO",
+"away": "Ale&Max",
+"awayCanon": "ALE & MAX",
+"gh": 2,
+"ga": 3
+},
+{
+"md": 27,
+"home": "Ale&Max",
+"homeCanon": "ALE & MAX",
+"away": "Roberto",
+"awayCanon": "ROBERTO",
+"gh": 0,
+"ga": 1
+},
+{
+"md": 1,
+"home": "Salvo",
+"homeCanon": "SALVO",
+"away": "Mario&Amedeo",
+"awayCanon": "MARIO & AMEDEO",
+"gh": 1,
+"ga": 0
+},
+{
+"md": 17,
+"home": "Mario&Amedeo",
+"homeCanon": "MARIO & AMEDEO",
+"away": "Salvo",
+"awayCanon": "SALVO",
+"gh": 2,
+"ga": 1
+},
+{
+"md": 9,
+"home": "Mario&Amedeo",
+"homeCanon": "MARIO & AMEDEO",
+"away": "Gianni",
+"awayCanon": "GIANNI",
+"gh": 0,
+"ga": 1
+},
+{
+"md": 27,
+"home": "Gianni",
+"homeCanon": "GIANNI",
+"away": "Mario&Amedeo",
+"awayCanon": "MARIO & AMEDEO",
+"gh": 0,
+"ga": 2
+},
+{
+"md": 1,
+"home": "Greg",
+"homeCanon": "GREG",
+"away": "Roberto",
+"awayCanon": "ROBERTO",
+"gh": 2,
+"ga": 2
+},
+{
+"md": 17,
+"home": "Roberto",
+"homeCanon": "ROBERTO",
+"away": "Greg",
+"awayCanon": "GREG",
+"gh": 1,
+"ga": 2
+},
+{
+"md": 9,
+"home": "Santoro",
+"homeCanon": "SANTORO",
+"away": "Marco",
+"awayCanon": "MARCO",
+"gh": 2,
+"ga": 2
+},
+{
+"md": 27,
+"home": "Marco",
+"homeCanon": "MARCO",
+"away": "Santoro",
+"awayCanon": "SANTORO",
+"gh": 2,
+"ga": 1
+},
+{
+"md": 1,
+"home": "Fabio",
+"homeCanon": "FABIO",
+"away": "Santoro",
+"awayCanon": "SANTORO",
+"gh": 2,
+"ga": 1
+},
+{
+"md": 17,
+"home": "Santoro",
+"homeCanon": "SANTORO",
+"away": "Fabio",
+"awayCanon": "FABIO",
+"gh": 1,
+"ga": 2
+},
+{
+"md": 9,
+"home": "Fabio",
+"homeCanon": "FABIO",
+"away": "Domenico",
+"awayCanon": "DOMENICO",
+"gh": 0,
+"ga": 2
+},
+{
+"md": 27,
+"home": "Domenico",
+"homeCanon": "DOMENICO",
+"away": "Fabio",
+"awayCanon": "FABIO",
+"gh": 1,
+"ga": 2
+},
+{
+"md": 2,
+"home": "Marco",
+"homeCanon": "MARCO",
+"away": "Domenico",
+"awayCanon": "DOMENICO",
+"gh": 2,
+"ga": 2
+},
+{
+"md": 19,
+"home": "Domenico",
+"homeCanon": "DOMENICO",
+"away": "Marco",
+"awayCanon": "MARCO",
+"gh": 1,
+"ga": 2
+},
+{
+"md": 11,
+"home": "Domenico",
+"homeCanon": "DOMENICO",
+"away": "Gianni",
+"awayCanon": "GIANNI",
+"gh": 2,
+"ga": 0
+},
+{
+"md": 29,
+"home": "Gianni",
+"homeCanon": "GIANNI",
+"away": "Domenico",
+"awayCanon": "DOMENICO",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 2,
+"home": "Roberto",
+"homeCanon": "ROBERTO",
+"away": "Fabio",
+"awayCanon": "FABIO",
+"gh": 0,
+"ga": 1
+},
+{
+"md": 19,
+"home": "Fabio",
+"homeCanon": "FABIO",
+"away": "Roberto",
+"awayCanon": "ROBERTO",
+"gh": 1,
+"ga": 2
+},
+{
+"md": 11,
+"home": "Marco",
+"homeCanon": "MARCO",
+"away": "Roberto",
+"awayCanon": "ROBERTO",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 29,
+"home": "Roberto",
+"homeCanon": "ROBERTO",
+"away": "Marco",
+"awayCanon": "MARCO",
+"gh": 2,
+"ga": 1
+},
+{
+"md": 2,
+"home": "Mario&Amedeo",
+"homeCanon": "MARIO & AMEDEO",
+"away": "Greg",
+"awayCanon": "GREG",
+"gh": 0,
+"ga": 1
+},
+{
+"md": 19,
+"home": "Greg",
+"homeCanon": "GREG",
+"away": "Mario&Amedeo",
+"awayCanon": "MARIO & AMEDEO",
+"gh": 1,
+"ga": 2
+},
+{
+"md": 11,
+"home": "Salvo",
+"homeCanon": "SALVO",
+"away": "Fabio",
+"awayCanon": "FABIO",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 29,
+"home": "Fabio",
+"homeCanon": "FABIO",
+"away": "Salvo",
+"awayCanon": "SALVO",
+"gh": 2,
+"ga": 1
+},
+{
+"md": 2,
+"home": "Ale&Max",
+"homeCanon": "ALE & MAX",
+"away": "Salvo",
+"awayCanon": "SALVO",
+"gh": 0,
+"ga": 1
+},
+{
+"md": 19,
+"home": "Salvo",
+"homeCanon": "SALVO",
+"away": "Ale&Max",
+"awayCanon": "ALE & MAX",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 11,
+"home": "Ale&Max",
+"homeCanon": "ALE & MAX",
+"away": "Greg",
+"awayCanon": "GREG",
+"gh": 2,
+"ga": 1
+},
+{
+"md": 29,
+"home": "Greg",
+"homeCanon": "GREG",
+"away": "Ale&Max",
+"awayCanon": "ALE & MAX",
+"gh": 1,
+"ga": 2
+},
+{
+"md": 2,
+"home": "Santoro",
+"homeCanon": "SANTORO",
+"away": "Gianni",
+"awayCanon": "GIANNI",
+"gh": 0,
+"ga": 3
+},
+{
+"md": 19,
+"home": "Gianni",
+"homeCanon": "GIANNI",
+"away": "Santoro",
+"awayCanon": "SANTORO",
+"gh": 1,
+"ga": 2
+},
+{
+"md": 11,
+"home": "Santoro",
+"homeCanon": "SANTORO",
+"away": "Mario&Amedeo",
+"awayCanon": "MARIO & AMEDEO",
+"gh": 0,
+"ga": 1
+},
+{
+"md": 29,
+"home": "Mario&Amedeo",
+"homeCanon": "MARIO & AMEDEO",
+"away": "Santoro",
+"awayCanon": "SANTORO",
+"gh": 1,
+"ga": 0
+},
+{
+"md": 3,
+"home": "Domenico",
+"homeCanon": "DOMENICO",
+"away": "Santoro",
+"awayCanon": "SANTORO",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 21,
+"home": "Santoro",
+"homeCanon": "SANTORO",
+"away": "Domenico",
+"awayCanon": "DOMENICO",
+"gh": 3,
+"ga": 2
+},
+{
+"md": 13,
+"home": "Domenico",
+"homeCanon": "DOMENICO",
+"away": "Mario&Amedeo",
+"awayCanon": "MARIO & AMEDEO",
+"gh": 2,
+"ga": 1
+},
+{
+"md": 30,
+"home": "Mario&Amedeo",
+"homeCanon": "MARIO & AMEDEO",
+"away": "Domenico",
+"awayCanon": "DOMENICO",
+"gh": 0,
+"ga": 0
+},
+{
+"md": 3,
+"home": "Gianni",
+"homeCanon": "GIANNI",
+"away": "Roberto",
+"awayCanon": "ROBERTO",
+"gh": 1,
+"ga": 0
+},
+{
+"md": 21,
+"home": "Roberto",
+"homeCanon": "ROBERTO",
+"away": "Gianni",
+"awayCanon": "GIANNI",
+"gh": 2,
+"ga": 1
+},
+{
+"md": 13,
+"home": "Gianni",
+"homeCanon": "GIANNI",
+"away": "Salvo",
+"awayCanon": "SALVO",
+"gh": 0,
+"ga": 1
+},
+{
+"md": 30,
+"home": "Salvo",
+"homeCanon": "SALVO",
+"away": "Gianni",
+"awayCanon": "GIANNI",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 3,
+"home": "Salvo",
+"homeCanon": "SALVO",
+"away": "Marco",
+"awayCanon": "MARCO",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 21,
+"home": "Marco",
+"homeCanon": "MARCO",
+"away": "Salvo",
+"awayCanon": "SALVO",
+"gh": 2,
+"ga": 1
+},
+{
+"md": 13,
+"home": "Greg",
+"homeCanon": "GREG",
+"away": "Marco",
+"awayCanon": "MARCO",
+"gh": 2,
+"ga": 3
+},
+{
+"md": 30,
+"home": "Marco",
+"homeCanon": "MARCO",
+"away": "Greg",
+"awayCanon": "GREG",
+"gh": 2,
+"ga": 1
+},
+{
+"md": 3,
+"home": "Ale&Max",
+"homeCanon": "ALE & MAX",
+"away": "Mario&Amedeo",
+"awayCanon": "MARIO & AMEDEO",
+"gh": 1,
+"ga": 2
+},
+{
+"md": 21,
+"home": "Mario&Amedeo",
+"homeCanon": "MARIO & AMEDEO",
+"away": "Ale&Max",
+"awayCanon": "ALE & MAX",
+"gh": 2,
+"ga": 2
+},
+{
+"md": 13,
+"home": "Roberto",
+"homeCanon": "ROBERTO",
+"away": "Santoro",
+"awayCanon": "SANTORO",
+"gh": 1,
+"ga": 2
+},
+{
+"md": 30,
+"home": "Santoro",
+"homeCanon": "SANTORO",
+"away": "Roberto",
+"awayCanon": "ROBERTO",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 3,
+"home": "Fabio",
+"homeCanon": "FABIO",
+"away": "Greg",
+"awayCanon": "GREG",
+"gh": 3,
+"ga": 0
+},
+{
+"md": 21,
+"home": "Greg",
+"homeCanon": "GREG",
+"away": "Fabio",
+"awayCanon": "FABIO",
+"gh": 2,
+"ga": 2
+},
+{
+"md": 13,
+"home": "Fabio",
+"homeCanon": "FABIO",
+"away": "Ale&Max",
+"awayCanon": "ALE & MAX",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 30,
+"home": "Ale&Max",
+"homeCanon": "ALE & MAX",
+"away": "Fabio",
+"awayCanon": "FABIO",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 5,
+"home": "Marco",
+"homeCanon": "MARCO",
+"away": "Ale&Max",
+"awayCanon": "ALE & MAX",
+"gh": 2,
+"ga": 2
+},
+{
+"md": 23,
+"home": "Ale&Max",
+"homeCanon": "ALE & MAX",
+"away": "Marco",
+"awayCanon": "MARCO",
+"gh": 0,
+"ga": 0
+},
+{
+"md": 15,
+"home": "Marco",
+"homeCanon": "MARCO",
+"away": "Fabio",
+"awayCanon": "FABIO",
+"gh": 1,
+"ga": 2
+},
+{
+"md": 31,
+"home": "Fabio",
+"homeCanon": "FABIO",
+"away": "Marco",
+"awayCanon": "MARCO",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 5,
+"home": "Greg",
+"homeCanon": "GREG",
+"away": "Gianni",
+"awayCanon": "GIANNI",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 23,
+"home": "Gianni",
+"homeCanon": "GIANNI",
+"away": "Greg",
+"awayCanon": "GREG",
+"gh": 1,
+"ga": 3
+},
+{
+"md": 15,
+"home": "Salvo",
+"homeCanon": "SALVO",
+"away": "Domenico",
+"awayCanon": "DOMENICO",
+"gh": 0,
+"ga": 2
+},
+{
+"md": 31,
+"home": "Domenico",
+"homeCanon": "DOMENICO",
+"away": "Salvo",
+"awayCanon": "SALVO",
+"gh": 0,
+"ga": 1
+},
+{
+"md": 5,
+"home": "Roberto",
+"homeCanon": "ROBERTO",
+"away": "Domenico",
+"awayCanon": "DOMENICO",
+"gh": 1,
+"ga": 2
+},
+{
+"md": 23,
+"home": "Domenico",
+"homeCanon": "DOMENICO",
+"away": "Roberto",
+"awayCanon": "ROBERTO",
+"gh": 1,
+"ga": 0
+},
+{
+"md": 15,
+"home": "Mario&Amedeo",
+"homeCanon": "MARIO & AMEDEO",
+"away": "Roberto",
+"awayCanon": "ROBERTO",
+"gh": 2,
+"ga": 0
+},
+{
+"md": 31,
+"home": "Roberto",
+"homeCanon": "ROBERTO",
+"away": "Mario&Amedeo",
+"awayCanon": "MARIO & AMEDEO",
+"gh": 1,
+"ga": 0
+},
+{
+"md": 5,
+"home": "Mario&Amedeo",
+"homeCanon": "MARIO & AMEDEO",
+"away": "Fabio",
+"awayCanon": "FABIO",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 23,
+"home": "Fabio",
+"homeCanon": "FABIO",
+"away": "Mario&Amedeo",
+"awayCanon": "MARIO & AMEDEO",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 15,
+"home": "Ale&Max",
+"homeCanon": "ALE & MAX",
+"away": "Gianni",
+"awayCanon": "GIANNI",
+"gh": 1,
+"ga": 2
+},
+{
+"md": 31,
+"home": "Gianni",
+"homeCanon": "GIANNI",
+"away": "Ale&Max",
+"awayCanon": "ALE & MAX",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 5,
+"home": "Santoro",
+"homeCanon": "SANTORO",
+"away": "Salvo",
+"awayCanon": "SALVO",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 23,
+"home": "Salvo",
+"homeCanon": "SALVO",
+"away": "Santoro",
+"awayCanon": "SANTORO",
+"gh": 3,
+"ga": 2
+},
+{
+"md": 15,
+"home": "Santoro",
+"homeCanon": "SANTORO",
+"away": "Greg",
+"awayCanon": "GREG",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 31,
+"home": "Greg",
+"homeCanon": "GREG",
+"away": "Santoro",
+"awayCanon": "SANTORO",
+"gh": 2,
+"ga": 0
+},
+{
+"md": 7,
+"home": "Domenico",
+"homeCanon": "DOMENICO",
+"away": "Greg",
+"awayCanon": "GREG",
+"gh": 2,
+"ga": 2
+},
+{
+"md": 25,
+"home": "Greg",
+"homeCanon": "GREG",
+"away": "Domenico",
+"awayCanon": "DOMENICO",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 7,
+"home": "Gianni",
+"homeCanon": "GIANNI",
+"away": "Fabio",
+"awayCanon": "FABIO",
+"gh": 2,
+"ga": 3
+},
+{
+"md": 25,
+"home": "Fabio",
+"homeCanon": "FABIO",
+"away": "Gianni",
+"awayCanon": "GIANNI",
+"gh": 1,
+"ga": 0
+},
+{
+"md": 7,
+"home": "Marco",
+"homeCanon": "MARCO",
+"away": "Mario&Amedeo",
+"awayCanon": "MARIO & AMEDEO",
+"gh": 3,
+"ga": 0
+},
+{
+"md": 25,
+"home": "Mario&Amedeo",
+"homeCanon": "MARIO & AMEDEO",
+"away": "Marco",
+"awayCanon": "MARCO",
+"gh": 1,
+"ga": 1
+},
+{
+"md": 7,
+"home": "Salvo",
+"homeCanon": "SALVO",
+"away": "Roberto",
+"awayCanon": "ROBERTO",
+"gh": 1,
+"ga": 3
+},
+{
+"md": 25,
+"home": "Roberto",
+"homeCanon": "ROBERTO",
+"away": "Salvo",
+"awayCanon": "SALVO",
+"gh": 0,
+"ga": 3
+},
+{
+"md": 7,
+"home": "Ale&Max",
+"homeCanon": "ALE & MAX",
+"away": "Santoro",
+"awayCanon": "SANTORO",
+"gh": 0,
+"ga": 1
+},
+{
+"md": 25,
+"home": "Santoro",
+"homeCanon": "SANTORO",
+"away": "Ale&Max",
+"awayCanon": "ALE & MAX",
+"gh": 1,
+"ga": 2
+}
+],
+"bracket": {
+"semifinals": [
+{
+"a": "FABIO",
+"b": "MARIO&AMEDEO",
+"winner": "FABIO",
+"scoreA": [
+1,
+2
+],
+"scoreB": [
+2,
+1
+]
+},
+{
+"a": "SALVO",
+"b": "MARCO",
+"winner": "MARCO",
+"scoreA": [
+2,
+1
+],
+"scoreB": [
+1,
+3
+]
+}
+],
+"champion": "FABIO"
+}
+},
+"rosters": [
+{
+"canon": "ALE & MAX",
+"name": "ALE&MAX",
+"team": "I Bamboli Sui Cammelli",
+"players": [
+{
+"role": "POR",
+"player": "PROVEDEL",
+"price": 56
+},
+{
+"role": "POR",
+"player": "VASQUEZ",
+"price": 1
+},
+{
+"role": "POR",
+"player": "MANDAS",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "THEO HERNANDEZ",
+"price": 51
+},
+{
+"role": "DIF",
+"player": "ANGELINO",
+"price": 12
+},
+{
+"role": "DIF",
+"player": "ZORTEA",
+"price": 9
+},
+{
+"role": "DIF",
+"player": "BANI",
+"price": 2
+},
+{
+"role": "DIF",
+"player": "MASINA",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "ISMAJILI",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "SABELLI",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "CELIK",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "JIMENEZ",
+"price": 6
+},
+{
+"role": "CEN",
+"player": "CALHANOGLU",
+"price": 65
+},
+{
+"role": "CEN",
+"player": "FAGIOLI",
+"price": 2
+},
+{
+"role": "CEN",
+"player": "PESSINA",
+"price": 20
+},
+{
+"role": "CEN",
+"player": "CRISTANTE",
+"price": 3
+},
+{
+"role": "CEN",
+"player": "DE ROON",
+"price": 3
+},
+{
+"role": "CEN",
+"player": "RICCI",
+"price": 5
+},
+{
+"role": "CEN",
+"player": "ROVELLA",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "HENDERSON",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "MIRETTI",
+"price": 16
+},
+{
+"role": "ATT",
+"player": "LOOKMAN",
+"price": 73
+},
+{
+"role": "ATT",
+"player": "ZAPATA",
+"price": 73
+},
+{
+"role": "ATT",
+"player": "BELOTTI",
+"price": 10
+},
+{
+"role": "ATT",
+"player": "NDOYE",
+"price": 5
+},
+{
+"role": "ATT",
+"player": "OKAFOR",
+"price": 2
+},
+{
+"role": "ATT",
+"player": "BRENNER",
+"price": null
+},
+{
+"role": "ATT",
+"player": "FORSON",
+"price": 2
+}
+]
+},
+{
+"canon": "MARCO",
+"name": "MARCO",
+"team": "Anche quest'anno...vinco l'anno prossimo",
+"players": [
+{
+"role": "POR",
+"player": "MERET",
+"price": 55
+},
+{
+"role": "POR",
+"player": "CAPRILE",
+"price": 1
+},
+{
+"role": "POR",
+"player": "CONTINI",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "DI MARCO",
+"price": 40
+},
+{
+"role": "DIF",
+"player": "TOMORI",
+"price": 11
+},
+{
+"role": "DIF",
+"player": "PARISI",
+"price": 4
+},
+{
+"role": "DIF",
+"player": "MINA",
+"price": 4
+},
+{
+"role": "DIF",
+"player": "CANDELA",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "GENDREY",
+"price": 3
+},
+{
+"role": "DIF",
+"player": "MARTIN",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "MARIN",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "DEMBELE'",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "COLPANI",
+"price": 38
+},
+{
+"role": "CEN",
+"player": "LE FEE",
+"price": 16
+},
+{
+"role": "CEN",
+"player": "HARROUI",
+"price": 18
+},
+{
+"role": "CEN",
+"player": "CASTROVILLI",
+"price": 12
+},
+{
+"role": "CEN",
+"player": "VIOLA",
+"price": 3
+},
+{
+"role": "CEN",
+"player": "VERDI",
+"price": 3
+},
+{
+"role": "CEN",
+"player": "KASTANOS",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "FERGUSON",
+"price": 5
+},
+{
+"role": "CEN",
+"player": "FAZZINI",
+"price": 30
+},
+{
+"role": "ATT",
+"player": "YLDIZ",
+"price": 29
+},
+{
+"role": "ATT",
+"player": "THAUVIN",
+"price": 25
+},
+{
+"role": "ATT",
+"player": "RETEGUI",
+"price": 43
+},
+{
+"role": "ATT",
+"player": "KRSTOVIC",
+"price": 24
+},
+{
+"role": "ATT",
+"player": "TAREMI",
+"price": 25
+},
+{
+"role": "ATT",
+"player": "DALLINGA",
+"price": 20
+},
+{
+"role": "ATT",
+"player": "MUTANDWA",
+"price": 1
+}
+]
+},
+{
+"canon": "SALVO",
+"name": "SALVO",
+"team": "A.C. Mondelliana",
+"players": [
+{
+"role": "POR",
+"player": "CARNESECCHI",
+"price": 43
+},
+{
+"role": "POR",
+"player": "SCUFFET",
+"price": 1
+},
+{
+"role": "POR",
+"player": "MUSSO",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "BUONGIORNO",
+"price": 31
+},
+{
+"role": "DIF",
+"player": "CALABRIA",
+"price": 2
+},
+{
+"role": "DIF",
+"player": "ZAPPACOSTA",
+"price": 9
+},
+{
+"role": "DIF",
+"player": "DODO",
+"price": 17
+},
+{
+"role": "DIF",
+"player": "MIRANDA",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "LUPERTO",
+"price": 2
+},
+{
+"role": "DIF",
+"player": "BASCHIROTTO",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "MORENO",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "KAYODE",
+"price": 11
+},
+{
+"role": "CEN",
+"player": "CHYKWUEZE",
+"price": 33
+},
+{
+"role": "CEN",
+"player": "ZANIOLO",
+"price": 33
+},
+{
+"role": "CEN",
+"player": "LAZOVIC",
+"price": 6
+},
+{
+"role": "CEN",
+"player": "GUENDOUZI",
+"price": 7
+},
+{
+"role": "CEN",
+"player": "TESSMANN",
+"price": 2
+},
+{
+"role": "CEN",
+"player": "ZURKOWSKI",
+"price": 2
+},
+{
+"role": "CEN",
+"player": "DUNCAN",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "BUSIO",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "URBANSKI",
+"price": 1
+},
+{
+"role": "ATT",
+"player": "KVARATSKHEILA",
+"price": 63
+},
+{
+"role": "ATT",
+"player": "LEAO",
+"price": 68
+},
+{
+"role": "ATT",
+"player": "VITINHA",
+"price": 12
+},
+{
+"role": "ATT",
+"player": "KEAN",
+"price": 36
+},
+{
+"role": "ATT",
+"player": "LUCCA",
+"price": 15
+},
+{
+"role": "ATT",
+"player": "POLITANO",
+"price": 6
+},
+{
+"role": "ATT",
+"player": "PIZARRO",
+"price": 1
+}
+]
+},
+{
+"canon": "ROBERTO",
+"name": "ROBERTO",
+"team": "Vis Conzo F.C.",
+"players": [
+{
+"role": "POR",
+"player": "SKORUPSKI",
+"price": 25
+},
+{
+"role": "POR",
+"player": "OKOYE",
+"price": 6
+},
+{
+"role": "POR",
+"player": "AUDERO",
+"price": 11
+},
+{
+"role": "DIF",
+"player": "DANILO",
+"price": 10
+},
+{
+"role": "DIF",
+"player": "ACERBI",
+"price": 8
+},
+{
+"role": "DIF",
+"player": "KOLASINAC",
+"price": 7
+},
+{
+"role": "DIF",
+"player": "GASPAR",
+"price": 2
+},
+{
+"role": "DIF",
+"player": "COCO",
+"price": 3
+},
+{
+"role": "DIF",
+"player": "NUNO TAVARES",
+"price": 6
+},
+{
+"role": "DIF",
+"player": "ZANOLI",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "MAZZOCCHI",
+"price": 2
+},
+{
+"role": "DIF",
+"player": "DORGU",
+"price": 14
+},
+{
+"role": "CEN",
+"player": "LOFTUS CHEEK",
+"price": 33
+},
+{
+"role": "CEN",
+"player": "THURAM",
+"price": 16
+},
+{
+"role": "CEN",
+"player": "EDERSON",
+"price": 25
+},
+{
+"role": "CEN",
+"player": "FOLORUNSHO",
+"price": 6
+},
+{
+"role": "CEN",
+"player": "MESSIAS",
+"price": 10
+},
+{
+"role": "CEN",
+"player": "ZIELINSKI",
+"price": 10
+},
+{
+"role": "CEN",
+"player": "PASALIC",
+"price": 23
+},
+{
+"role": "CEN",
+"player": "HERNANI",
+"price": 3
+},
+{
+"role": "CEN",
+"player": "BONDO",
+"price": 1
+},
+{
+"role": "ATT",
+"player": "DOVBYK",
+"price": 136
+},
+{
+"role": "ATT",
+"player": "ORSOLINI",
+"price": 9
+},
+{
+"role": "ATT",
+"player": "NOSLIN",
+"price": 15
+},
+{
+"role": "ATT",
+"player": "MOSQUERA",
+"price": 6
+},
+{
+"role": "ATT",
+"player": "SANCHEZ",
+"price": 5
+},
+{
+"role": "ATT",
+"player": "NICO GONZALEZ",
+"price": 13
+},
+{
+"role": "ATT",
+"player": "BRAVO",
+"price": 1
+}
+]
+},
+{
+"canon": "GIANNI",
+"name": "GIANNI",
+"team": "GC 19",
+"players": [
+{
+"role": "POR",
+"player": "SVILAR",
+"price": 43
+},
+{
+"role": "POR",
+"player": "MONTIPO",
+"price": 1
+},
+{
+"role": "POR",
+"player": "RYAN",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "BASTONI",
+"price": 16
+},
+{
+"role": "DIF",
+"player": "POSCH",
+"price": 9
+},
+{
+"role": "DIF",
+"player": "MANCINI",
+"price": 5
+},
+{
+"role": "DIF",
+"player": "BIRAGHI",
+"price": 3
+},
+{
+"role": "DIF",
+"player": "FRESE",
+"price": 2
+},
+{
+"role": "DIF",
+"player": "GILA",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "VALERI",
+"price": 2
+},
+{
+"role": "DIF",
+"player": "BIRINDELLI",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "COPPOLA",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "SAMARDZIC",
+"price": 26
+},
+{
+"role": "CEN",
+"player": "FRATTESI",
+"price": 26
+},
+{
+"role": "CEN",
+"player": "SUSLOV",
+"price": 20
+},
+{
+"role": "CEN",
+"player": "MARCHWINSKI",
+"price": 27
+},
+{
+"role": "CEN",
+"player": "ANGUISSA",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "ILIC",
+"price": 8
+},
+{
+"role": "CEN",
+"player": "GAGLIARDINI",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "PRATI",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "FABBIAN",
+"price": 47
+},
+{
+"role": "ATT",
+"player": "VLAHOVIC",
+"price": 133
+},
+{
+"role": "ATT",
+"player": "MAN",
+"price": 28
+},
+{
+"role": "ATT",
+"player": "DE KETELAERE",
+"price": 23
+},
+{
+"role": "ATT",
+"player": "ESPOSITO",
+"price": 1
+},
+{
+"role": "ATT",
+"player": "TOURE'",
+"price": 1
+},
+{
+"role": "ATT",
+"player": "KARLSSON",
+"price": 1
+},
+{
+"role": "ATT",
+"player": "RAIMONDO",
+"price": 1
+}
+]
+},
+{
+"canon": "MARIO & AMEDEO",
+"name": "MARIO&AMEDEO",
+"team": "Masterchef FC",
+"players": [
+{
+"role": "POR",
+"player": "SOMMER",
+"price": 63
+},
+{
+"role": "POR",
+"player": "CRAGNO",
+"price": 1
+},
+{
+"role": "POR",
+"player": "MARTINEZ",
+"price": 4
+},
+{
+"role": "DIF",
+"player": "SPINAZZOLA",
+"price": 21
+},
+{
+"role": "DIF",
+"player": "GATTI",
+"price": 6
+},
+{
+"role": "DIF",
+"player": "HOLM",
+"price": 2
+},
+{
+"role": "DIF",
+"player": "CABAL",
+"price": 4
+},
+{
+"role": "DIF",
+"player": "VOJVODA",
+"price": 4
+},
+{
+"role": "DIF",
+"player": "BEUKEMA",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "DOSSENA",
+"price": 2
+},
+{
+"role": "DIF",
+"player": "OLIVERA",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "OKOU",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "TCHAOUNA",
+"price": 28
+},
+{
+"role": "CEN",
+"player": "DA CUNHA",
+"price": 26
+},
+{
+"role": "CEN",
+"player": "MALYNOVSKIY",
+"price": 4
+},
+{
+"role": "CEN",
+"player": "FREULER",
+"price": 4
+},
+{
+"role": "CEN",
+"player": "VLASIC",
+"price": 15
+},
+{
+"role": "CEN",
+"player": "AEBISCHER",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "DELE-BASHIRU",
+"price": 4
+},
+{
+"role": "CEN",
+"player": "ZALEWSKI",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "SULEMANA",
+"price": 1
+},
+{
+"role": "ATT",
+"player": "LAUTARO MARTINEZ",
+"price": 161
+},
+{
+"role": "ATT",
+"player": "CASTELLANOS",
+"price": 35
+},
+{
+"role": "ATT",
+"player": "DJURIC",
+"price": 7
+},
+{
+"role": "ATT",
+"player": "ABRAHAM",
+"price": 3
+},
+{
+"role": "ATT",
+"player": "GYTLKJAER",
+"price": 1
+},
+{
+"role": "ATT",
+"player": "MOTA",
+"price": 1
+},
+{
+"role": "ATT",
+"player": "MITROVIC",
+"price": 1
+}
+]
+},
+{
+"canon": "DOMENICO",
+"name": "DOMENICO",
+"team": "Reijnders F.C.",
+"players": [
+{
+"role": "POR",
+"player": "DE GEA",
+"price": 41
+},
+{
+"role": "POR",
+"player": "GOLLINI",
+"price": 8
+},
+{
+"role": "POR",
+"player": "TERRACCIANO",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "DUMFRIES",
+"price": 28
+},
+{
+"role": "DIF",
+"player": "DARMIAN",
+"price": 6
+},
+{
+"role": "DIF",
+"player": "VARANE",
+"price": 11
+},
+{
+"role": "DIF",
+"player": "RUGGERI",
+"price": 11
+},
+{
+"role": "DIF",
+"player": "PEREZ",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "MARI",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "LAZZARI",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "MARUSIC",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "DAHL",
+"price": 7
+},
+{
+"role": "CEN",
+"player": "SOULE'",
+"price": 63
+},
+{
+"role": "CEN",
+"player": "REIJNDERS",
+"price": 21
+},
+{
+"role": "CEN",
+"player": "MKHITARYAN",
+"price": 22
+},
+{
+"role": "CEN",
+"player": "MANDRAGORA",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "EKKELENKAMP",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "MARIN",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "LOCATELLI",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "MORO",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "ORISTANIO",
+"price": 35
+},
+{
+"role": "ATT",
+"player": "MALDINI",
+"price": 19
+},
+{
+"role": "ATT",
+"player": "MORATA",
+"price": 121
+},
+{
+"role": "ATT",
+"player": "CHIESA",
+"price": 13
+},
+{
+"role": "ATT",
+"player": "COLOMBO",
+"price": 5
+},
+{
+"role": "ATT",
+"player": "ADAMS",
+"price": 3
+},
+{
+"role": "ATT",
+"player": "JOVIC",
+"price": 2
+},
+{
+"role": "ATT",
+"player": "SHPENDI",
+"price": 1
+}
+]
+},
+{
+"canon": "SANTORO",
+"name": "SANTORO",
+"team": "Marco’s Angels",
+"players": [
+{
+"role": "POR",
+"player": "MILINKOVIC SAVIC",
+"price": 35
+},
+{
+"role": "POR",
+"player": "SUZUKI",
+"price": 5
+},
+{
+"role": "POR",
+"player": "JORONEN",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "PAVLOVIC",
+"price": 25
+},
+{
+"role": "DIF",
+"player": "DI LORENZO",
+"price": 30
+},
+{
+"role": "DIF",
+"player": "CARLOS AUGUSTO",
+"price": 7
+},
+{
+"role": "DIF",
+"player": "MARTINEZ QUARTA",
+"price": 12
+},
+{
+"role": "DIF",
+"player": "DEL PRATO",
+"price": 3
+},
+{
+"role": "DIF",
+"player": "VITI",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "KYRIAKOPOULOS",
+"price": 2
+},
+{
+"role": "DIF",
+"player": "CALDIROLA",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "TERRACCIANO",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "KOOPMEINERS",
+"price": 60
+},
+{
+"role": "CEN",
+"player": "DOUGLAS LUIZ",
+"price": 40
+},
+{
+"role": "CEN",
+"player": "BALDANZI",
+"price": 3
+},
+{
+"role": "CEN",
+"player": "PAYERO",
+"price": 3
+},
+{
+"role": "CEN",
+"player": "OUDIN",
+"price": 6
+},
+{
+"role": "CEN",
+"player": "FREDRUP",
+"price": 4
+},
+{
+"role": "CEN",
+"player": "VECINO",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "DUDA",
+"price": 2
+},
+{
+"role": "CEN",
+"player": "DOUMBIA",
+"price": 1
+},
+{
+"role": "ATT",
+"player": "OSIMHEN",
+"price": 85
+},
+{
+"role": "ATT",
+"player": "GUDMUDSSON",
+"price": 50
+},
+{
+"role": "ATT",
+"player": "POHJANPALO",
+"price": 15
+},
+{
+"role": "ATT",
+"player": "LUVUMBO",
+"price": 4
+},
+{
+"role": "ATT",
+"player": "SOTTIL",
+"price": 1
+},
+{
+"role": "ATT",
+"player": "NGONGE",
+"price": 3
+},
+{
+"role": "ATT",
+"player": "CAMARDA",
+"price": 3
+}
+]
+},
+{
+"canon": "GREG",
+"name": "GREG",
+"team": "A Settembre sparisco FC",
+"players": [
+{
+"role": "POR",
+"player": "MAIGNAN",
+"price": 67
+},
+{
+"role": "POR",
+"player": "FALCONE",
+"price": 10
+},
+{
+"role": "POR",
+"player": "SILVESTRI",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "BREMER",
+"price": 30
+},
+{
+"role": "DIF",
+"player": "CAMBIASO",
+"price": 24
+},
+{
+"role": "DIF",
+"player": "BELLANOVA",
+"price": 25
+},
+{
+"role": "DIF",
+"player": "COULIBALY",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "PONGRACIC",
+"price": 10
+},
+{
+"role": "DIF",
+"player": "ERLIC",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "NDICKA",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "SMALLING",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "CIRCATI",
+"price": 3
+},
+{
+"role": "CEN",
+"player": "WEAH",
+"price": 9
+},
+{
+"role": "CEN",
+"player": "BERNABE",
+"price": 35
+},
+{
+"role": "CEN",
+"player": "LOBOTKA",
+"price": 6
+},
+{
+"role": "CEN",
+"player": "LOVRIC",
+"price": 9
+},
+{
+"role": "CEN",
+"player": "GAETANO",
+"price": 6
+},
+{
+"role": "CEN",
+"player": "ESTEVEZ",
+"price": 4
+},
+{
+"role": "CEN",
+"player": "EL SHAARAWY",
+"price": 2
+},
+{
+"role": "CEN",
+"player": "FELICI",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "PISILLI",
+"price": 1
+},
+{
+"role": "ATT",
+"player": "ZACCAGNI",
+"price": 45
+},
+{
+"role": "ATT",
+"player": "DYBALA",
+"price": 86
+},
+{
+"role": "ATT",
+"player": "CUTRONE",
+"price": 6
+},
+{
+"role": "ATT",
+"player": "MIHAILA",
+"price": 4
+},
+{
+"role": "ATT",
+"player": "RASPADORI",
+"price": 1
+},
+{
+"role": "ATT",
+"player": "PICCOLI",
+"price": 15
+},
+{
+"role": "ATT",
+"player": "BONNY",
+"price": 16
+}
+]
+},
+{
+"canon": "FABIO",
+"name": "FABIO",
+"team": "Scudettoinfaccia",
+"players": [
+{
+"role": "POR",
+"player": "DI GREGORIO",
+"price": 66
+},
+{
+"role": "POR",
+"player": "PERIN",
+"price": 1
+},
+{
+"role": "POR",
+"player": "PINSOGLIO",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "RRAHMANI",
+"price": 11
+},
+{
+"role": "DIF",
+"player": "PAVARD",
+"price": 16
+},
+{
+"role": "DIF",
+"player": "BIJOL",
+"price": 7
+},
+{
+"role": "DIF",
+"player": "ROMAGNOLI",
+"price": 4
+},
+{
+"role": "DIF",
+"player": "KAMARA",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "HIEN",
+"price": 6
+},
+{
+"role": "DIF",
+"player": "BISSECK",
+"price": 3
+},
+{
+"role": "DIF",
+"player": "DJIMSITI",
+"price": 1
+},
+{
+"role": "DIF",
+"player": "CORAZZA",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "BARELLA",
+"price": 42
+},
+{
+"role": "CEN",
+"player": "PELLEGRINI",
+"price": 38
+},
+{
+"role": "CEN",
+"player": "STREFEZZA",
+"price": 36
+},
+{
+"role": "CEN",
+"player": "PAREDES",
+"price": 3
+},
+{
+"role": "CEN",
+"player": "MAZZITELLI",
+"price": 4
+},
+{
+"role": "CEN",
+"player": "RAMADANI",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "MCKENNY",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "SOHM",
+"price": 1
+},
+{
+"role": "CEN",
+"player": "GINEITIS",
+"price": 1
+},
+{
+"role": "ATT",
+"player": "THURAM",
+"price": 84
+},
+{
+"role": "ATT",
+"player": "PULISIC",
+"price": 60
+},
+{
+"role": "ATT",
+"player": "SANABRIA",
+"price": 3
+},
+{
+"role": "ATT",
+"player": "BELTRAN",
+"price": 1
+},
+{
+"role": "ATT",
+"player": "CAMBIAGHI",
+"price": 2
+},
+{
+"role": "ATT",
+"player": "ISAKSEN",
+"price": 1
+},
+{
+"role": "ATT",
+"player": "CASTRO",
+"price": 30
+}
+]
+}
+],
+"source": {
+"classifiche": "F2425_Classifiche e calendario.xlsm",
+"rose": "F2425_Squadre_rev2024.07.xlsx"
+}
+}
