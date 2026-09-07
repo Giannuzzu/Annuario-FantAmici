@@ -370,13 +370,29 @@ function parseRose(wb){
         const pn=cleanPlayer(g.get(r,mg.col)); const pr=num(g.get(r,mg.col+1)); if(pn)players.push({role,player:pn,price:pr}); }
       return {canon:mg.canon,name:mg.name,team:mg.team,players}; });
   }
-  let startRow=null; for(let r=2;r<=g.maxR;r++){ if(cleanPlayer(g.get(r,managers[0].col))){startRow=r;break;} }
+    // layout POSIZIONALE: costruisci i reparti. Se ci sono righe vuote a separarli -> 4 gruppi = POR/DIF/CEN/ATT.
+  const col0=managers[0].col;
+  let startRow=null; for(let r=2;r<=g.maxR;r++){ if(cleanPlayer(g.get(r,col0))){startRow=r;break;} }
   if(startRow==null) throw new Error('Rose non trovate nel Foglio Asta');
-  let count=0; for(let r=startRow;r<=g.maxR;r++){ const v=cleanPlayer(g.get(r,managers[0].col)); if(!v||v.toUpperCase()==='DELTA')break; count++; }
-  const comp=ROSTER_TEMPLATES[count]; if(!comp) throw new Error('Composizione rosa non riconosciuta ('+count+' giocatori).');
-  const roleSeq=[]; ROLES.forEach((role,i)=>{ for(let k=0;k<comp[i];k++)roleSeq.push(role); });
+  const isTerm=raw=>{ if(raw==null)return false; const s=String(raw).trim(); return /^(totale|delta)$/i.test(s)||/^\d+([.,]\d+)?$/.test(s); };
+  const groups=[]; let curr=[], blanks=0;
+  for(let r=startRow;r<=g.maxR;r++){ const raw=g.get(r,col0); const v=cleanPlayer(raw);
+    if(v && isTerm(raw)) break;                          // TOTALE / DELTA / numero -> fine rosa
+    if(v){ curr.push(r); blanks=0; }
+    else { if(curr.length){ groups.push(curr); curr=[]; } blanks++; if(blanks>=3 && groups.length) break; }
+  }
+  if(curr.length) groups.push(curr);
+  const rowRole=[];
+  if(groups.length===4){
+    groups.forEach((grp,gi)=>grp.forEach(r=>rowRole.push({row:r,role:ROLES[gi]})));
+  } else {
+    const flat=[].concat(...groups); const comp=ROSTER_TEMPLATES[flat.length];
+    if(!comp) throw new Error('Composizione rosa non riconosciuta ('+flat.length+' giocatori).');
+    const seq=[]; ROLES.forEach((role,i)=>{ for(let k=0;k<comp[i];k++)seq.push(role); });
+    flat.forEach((r,i)=>rowRole.push({row:r,role:seq[i]}));
+  }
   return managers.map(mg=>{ const players=[];
-    for(let i=0;i<count;i++){ const pn=cleanPlayer(g.get(startRow+i,mg.col)); const pr=num(g.get(startRow+i,mg.col+1)); if(pn)players.push({role:roleSeq[i],player:pn,price:pr}); }
+    rowRole.forEach(rr=>{ const pn=cleanPlayer(g.get(rr.row,mg.col)); const pr=num(g.get(rr.row,mg.col+1)); if(pn)players.push({role:rr.role,player:pn,price:pr}); });
     return {canon:mg.canon,name:mg.name,team:mg.team,players}; });
 }
 
