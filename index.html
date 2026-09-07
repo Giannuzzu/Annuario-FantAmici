@@ -159,11 +159,12 @@ const EMBEDDED_SEASONS=[{"season":"2025/26","giornate":38,"managers":[{"canon":"
 const ROLES=['POR','DIF','CEN','ATT'];
 const ROSTER_TEMPLATES={25:[3,8,8,6],26:[3,8,8,7],28:[3,9,9,7]}; // giocatori per ruolo nei file storici SENZA colonna ruoli
 const ROLE_LABEL={POR:'Portieri',DIF:'Difensori',CEN:'Centrocampisti',ATT:'Attaccanti'};
-const NAME_ALIAS={'PEPPE':'GREG','GIUSEPPE':'GREG','MIMMO':'DOMENICO','MASSIMO':'MAX','MILLY':'GIANMARCO','STE & GIANM':'STE & GIANMARCO','CALO & MILLY':'CALOGERO & GIANMARCO','CLAUDIO & STE':'CLAUDIO & STEFANO','CLA & STE':'CLAUDIO & STEFANO','STE & CLA':'CLAUDIO & STEFANO','ALESSIO & MAX':'ALE & MAX','MARIO & AME':'MARIO & AMEDEO','MARCO S':'SANTORO','MARCO D':'MARCO'}; // allenatori rinominati/abbreviati negli anni: stessa persona (nome finale unificato)
+const NAME_ALIAS={'PEPPE':'GREG','GIUSEPPE':'GREG','MIMMO':'DOMENICO','MASSIMO':'MAX','MILLY':'GIANMARCO','STE & GIANM':'STE & GIANMARCO','CALO & MILLY':'CALOGERO & GIANMARCO','CLAUDIO & STE':'CLAUDIO & STEFANO','CLA & STE':'CLAUDIO & STEFANO','STE & CLA':'CLAUDIO & STEFANO','ALESSIO & MAX':'ALE & MAX','MARIO & AME':'MARIO & AMEDEO','MARCO S':'SANTORO','MARCO D':'MARCO'};
 const state={seasons:{}, current:null, tab:'riepilogo', pendingImport:null};
 
 const norm=v=>{ if(v==null) return null; const s=String(v).trim(); return s===''?null:s; };
 const canon=n=>{ if(n==null) return null; let s=String(n).trim().toUpperCase().replace(/\./g,' ').replace(/\s*&\s*/g,' & ').replace(/\s+/g,' ').trim(); return NAME_ALIAS[s]||s; };
+const TK=s=>String(s==null?'':s).toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Z0-9]/g,'');
 const num=v=> (typeof v==='number'&&!isNaN(v))?v : (typeof v==='string'&&v.trim()!==''&&!isNaN(+v)?+v:null);
 const fmt=v=> v==null?'–' : (Number.isInteger(v)?v: (Math.round(v*10)/10).toString().replace('.',','));
 const el=(t,c,h)=>{const e=document.createElement(t); if(c)e.className=c; if(h!=null)e.innerHTML=h; return e;};
@@ -182,7 +183,7 @@ const DB={ _db:null,
 function sheetToGrid(ws){ const ref=XLSX.utils.decode_range(ws['!ref']);
   return {maxR:ref.e.r+1,maxC:ref.e.c+1,get(r,c){const cell=ws[XLSX.utils.encode_cell({r:r-1,c:c-1})];return cell?cell.v:null;}}; }
 const findChampSheet=wb=>{
-  const withYear=wb.SheetNames.find(s=>{const c=wb.Sheets[s]&&wb.Sheets[s]['A1']; const a=c?String(c.v).trim():''; return /\d{4}\s*[\/-]\s*\d{2}/.test(a);});
+  const withYear=wb.SheetNames.find(s=>{const sh=wb.Sheets[s]; const c=sh&&sh['A1']?sh['A1'].v:null; const a=c!=null?String(c).trim():''; return /\d{4}\s*[\/-]\s*\d{2}/.test(a);});
   if(withYear) return withYear;
   return wb.SheetNames.find(s=>/classifica campionato/i.test(s))||wb.SheetNames.find(s=>/classifica/i.test(s)&&!/coppa/i.test(s))||wb.SheetNames.find(s=>/classifica/i.test(s))||wb.SheetNames[0];
 };
@@ -190,18 +191,14 @@ const findCupSheet=(wb,exclude)=>wb.SheetNames.find(s=>s!==exclude&&/classifica 
 const findCalendarSheet=wb=>wb.SheetNames.find(s=>/calendario/i.test(s));
 const findAstaSheet=wb=>wb.SheetNames.find(s=>/asta/i.test(s))||wb.SheetNames.find(s=>/agosto/i.test(s))||wb.SheetNames[0];
 const cleanPlayer=p=>{ if(p==null)return null; let s=String(p).trim().replace(/[\*\[\]]+/g,' ').replace(/\s+/g,' ').trim(); return s||null; };
-const parseScore=s=>{ s=norm(s); if(!s)return[null,null]; const m=String(s).match(/(\d+)\s*-\s*(\d+)/); return m?[+m[1],+m[2]]:[null,null]; };
+const parseScore=s=>{ s=norm(s); if(!s)return[null,null]; const m=String(s).match(/(\d+)\s*(?:-|a)\s*(\d+)/i); return m?[+m[1],+m[2]]:[null,null]; };
 
 function parseCupMatches(wb){
   const name=findCalendarSheet(wb); if(!name) return [];
-  const g=sheetToGrid(wb.Sheets[name]);
-  // detect text/two-legged format (Format B) by a '-' separator cell in the top rows
-  let isB=false;
-  for(let r=1;r<=Math.min(g.maxR,8)&&!isB;r++) for(let c=1;c<=g.maxC;c++){ if(norm(g.get(r,c))==='-'){isB=true;break;} }
-  const out=[];
-    // Formato C: sfida unita in una cella "CASA-OSPITE" + 2 celle punteggio (andata/ritorno)
+  const g=sheetToGrid(wb.Sheets[name]); const out=[];
+  // Formato C: sfida unita in una cella "CASA-OSPITE" + N celle punteggio consecutive (2 o 4 gambe, "X-Y" o "X a Y")
   let isC=false;
-  for(let r=1;r<=Math.min(g.maxR,12)&&!isC;r++) for(let c=1;c<=g.maxC;c++){ const v=norm(g.get(r,c));
+  for(let r=1;r<=Math.min(g.maxR,14)&&!isC;r++) for(let c=1;c<=g.maxC;c++){ const v=norm(g.get(r,c));
     if(v&&/[A-Za-z].*-.*[A-Za-z]/.test(v)&&!/^\s*\d/.test(v)&&v.split('-').length>=2){ const sc=parseScore(g.get(r,c+1)); if(sc[0]!=null){isC=true;break;} } }
   if(isC){
     for(let r=1;r<=g.maxR;r++) for(let c=1;c<=g.maxC;c++){ const v=norm(g.get(r,c));
@@ -209,25 +206,31 @@ function parseCupMatches(wb){
       const parts=v.split('-'); if(parts.length<2) continue;
       const away=parts.pop().trim(); const home=parts.join('-').trim();
       if(!(/[A-Za-z]/.test(home)&&/[A-Za-z]/.test(away))) continue;
-      const [a1,a2]=parseScore(g.get(r,c+1)); const [r1,r2]=parseScore(g.get(r,c+2));
-      if(a1==null&&r1==null) continue;
-      if(a1!=null) out.push({md:null,home,homeCanon:canon(home),away,awayCanon:canon(away),gh:a1,ga:a2});
-      if(r1!=null) out.push({md:null,home:away,homeCanon:canon(away),away:home,awayCanon:canon(home),gh:r2,ga:r1});
+      let leg=0;
+      for(let cc=c+1;cc<=g.maxC;cc++){ const [x,y]=parseScore(g.get(cc<=g.maxC?r:r,cc));
+        if(x==null){ break; }
+        if(leg%2===0) out.push({md:null,home,homeCanon:canon(home),away,awayCanon:canon(away),gh:x,ga:y});
+        else out.push({md:null,home:away,homeCanon:canon(away),away:home,awayCanon:canon(home),gh:y,ga:x});
+        leg++;
+      }
     }
     return out;
   }
+  // Formato B: separatore '-' in cella propria + due punteggi (andata/ritorno)
+  let isB=false;
+  for(let r=1;r<=Math.min(g.maxR,8)&&!isB;r++) for(let c=1;c<=g.maxC;c++){ if(norm(g.get(r,c))==='-'){isB=true;break;} }
   if(isB){
     const mdLabel=(r,c)=>{ for(let rr=r;rr>=1;rr--){ const v=norm(g.get(rr,c-2)); if(v&&/^\d+\s*-\s*\d+/.test(v)){ const m=v.match(/\d+/g); return [+m[0],+m[1]]; } } return [null,null]; };
     for(let r=1;r<=g.maxR;r++) for(let c=1;c<=g.maxC;c++){
       if(norm(g.get(r,c))!=='-') continue;
       const home=norm(g.get(r,c-1)), away=norm(g.get(r,c+1)); if(!home||!away) continue;
       const [md1,md2]=mdLabel(r,c);
-      const [a1,a2]=parseScore(g.get(r,c+2)); // andata: home a1 - away a2
-      const [r1,r2]=parseScore(g.get(r,c+3)); // ritorno: venue reversed, written left-right → home(new=away) gets r2
+      const [a1,a2]=parseScore(g.get(r,c+2)); const [r1,r2]=parseScore(g.get(r,c+3));
       if(a1!=null) out.push({md:md1,home,homeCanon:canon(home),away,awayCanon:canon(away),gh:a1,ga:a2});
       if(r1!=null) out.push({md:md2,home:away,homeCanon:canon(away),away:home,awayCanon:canon(home),gh:r2,ga:r1});
     }
   } else {
+    // Formato A: tabellare (una partita per riga)
     let md=null;
     for(let r=2;r<=g.maxR;r++){ const m=g.get(r,1); if(typeof m==='number')md=Math.round(m);
       const h=norm(g.get(r,2)), a=norm(g.get(r,3));
@@ -241,43 +244,31 @@ function parseClassifiche(wb){
   const champSheet=findChampSheet(wb);
   const g=sheetToGrid(wb.Sheets[champSheet]);
   const title=norm(g.get(1,1))||''; const sm=title.match(/(\d{4})\s*[\/-]\s*(\d{2})/); const season=sm?(sm[1]+'/'+sm[2]):null;
-
   const scores={},display={},totals={}; let G=0;
-
-  // --- layout STANDARD: riga con col2==1 && col3==2 ---
   let hdr=null; for(let r=1;r<=25;r++){ if(g.get(r,2)===1&&g.get(r,3)===2){hdr=r;break;} }
   if(hdr){
     let tot=null; for(let c=2;c<=90;c++){ const h=norm(g.get(hdr,c)); if(h&&/^total$/i.test(h)){tot=c;break;} }
     if(!tot) throw new Error('Colonna TOTAL campionato non trovata');
     G=tot-2; let r=hdr+1;
-    while(true){ const nm=norm(g.get(r,1)); if(!nm)break;
-      const sc=[]; for(let i=0;i<G;i++)sc.push(num(g.get(r,2+i)));
-      if(sc.every(x=>x==null))break;
-      const cn=canon(nm); scores[cn]=sc; display[cn]=cn; totals[cn]=num(g.get(r,tot)); r++;
-    }
+    while(true){ const nm=norm(g.get(r,1)); if(!nm)break; const sc=[]; for(let i=0;i<G;i++)sc.push(num(g.get(r,2+i)));
+      if(sc.every(x=>x==null))break; const cn=canon(nm); scores[cn]=sc; display[cn]=cn; totals[cn]=num(g.get(r,tot)); r++; }
   } else {
-    // --- layout TRASPOSTO (stagioni molto vecchie): allenatori in riga, giornate come righe ---
     let mgrRow=null;
-    for(let r=1;r<=8;r++){ let names=0; for(let c=1;c<=g.maxC;c++){ const v=norm(g.get(r,c)); if(v&&isNaN(+v))names++; }
-      if(names>=4){mgrRow=r;break;} }
+    for(let r=1;r<=8;r++){ let names=0; for(let c=1;c<=g.maxC;c++){ const v=norm(g.get(r,c)); if(v&&isNaN(+v))names++; } if(names>=4){mgrRow=r;break;} }
     if(mgrRow==null) throw new Error('Riga giornate campionato non trovata');
-    const mgrs=[]; for(let c=1;c<=g.maxC;c++){ const v=norm(g.get(mgrRow,c));
-      if(v&&isNaN(+v)) mgrs.push({col:c,name:v}); else if(mgrs.length) break; }
+    const mgrs=[]; for(let c=1;c<=g.maxC;c++){ const v=norm(g.get(mgrRow,c)); if(v&&isNaN(+v)) mgrs.push({col:c,name:v}); else if(mgrs.length) break; }
     if(mgrs.length<2) throw new Error('Riga giornate campionato non trovata');
     mgrs.forEach(m=>{ const cn=canon(m.name); display[cn]=cn; scores[cn]=[]; });
     let totalsRow=null;
-    for(let r=mgrRow+1;r<=g.maxR;r++){
-      const vals=mgrs.map(m=>num(g.get(r,m.col)));
-      if(vals.some(v=>v==null)) continue;
-      if(Math.max(...vals)>300){ totalsRow=r; break; }
-      mgrs.forEach((m,i)=>scores[canon(m.name)].push(vals[i]));
-    }
+    for(let r=mgrRow+1;r<=g.maxR;r++){ const vals=mgrs.map(m=>num(g.get(r,m.col)));
+      if(vals.some(v=>v==null)) continue; if(Math.max(...vals)>300){ totalsRow=r; break; }
+      mgrs.forEach((m,i)=>scores[canon(m.name)].push(vals[i])); }
     G=scores[canon(mgrs[0].name)].length;
     if(totalsRow){ mgrs.forEach(m=>totals[canon(m.name)]=num(g.get(totalsRow,m.col))); }
     else { mgrs.forEach(m=>{ const cn=canon(m.name); totals[cn]=scores[cn].reduce((a,b)=>a+(b||0),0); }); }
   }
 
-  // --- classifica Coppa: prima nel foglio campionato, altrimenti nel foglio "Classifica Coppa" ---
+  // classifica Coppa: foglio campionato, altrimenti foglio separato
   let cupGrid=g, cr=null;
   for(let rr=1;rr<=90;rr++){const v=norm(g.get(rr,1)); if(v&&/^(cup standing|classifica coppa)/i.test(v)){cr=rr;break;}}
   if(cr==null){ const cs=findCupSheet(wb,champSheet); if(cs){ cupGrid=sheetToGrid(wb.Sheets[cs]);
@@ -309,28 +300,23 @@ function parseClassifiche(wb){
     }
   }
 
-  // --- Final Four (stesso foglio della classifica Coppa) ---
+  // Final Four
   let ffr=null; for(let rr=1;rr<=cupGrid.maxR;rr++){const v=norm(cupGrid.get(rr,1)); if(v&&/^(final four|fase finale)/i.test(v)){ffr=rr;break;}}
   const bracket={semifinals:[],champion:null};
   if(ffr!=null){ const sfRows=[],winners=[]; let champ=null,champCol=-1;
-    for(let rr=ffr+1;rr<ffr+16;rr++){
-      const nm=norm(cupGrid.get(rr,1));
+    for(let rr=ffr+1;rr<ffr+16;rr++){ const nm=norm(cupGrid.get(rr,1));
       const nums=[]; for(let c=2;c<=6;c++){const x=num(cupGrid.get(rr,c)); if(x!=null)nums.push(x);}
       if(nm&&nums.length>=1)sfRows.push({name:nm,scores:nums.slice(0,2)});
       const w=norm(cupGrid.get(rr,6)); if(w&&isNaN(+w))winners.push(w);
-      for(let c=7;c<40;c++){const v=norm(cupGrid.get(rr,c)); if(v&&/[A-Za-z]/.test(v)&&c>champCol){champ=v;champCol=c;}}
-    }
-    for(let i=0;i+1<sfRows.length;i+=2)
-      bracket.semifinals.push({a:sfRows[i].name,b:sfRows[i+1].name,winner:winners[i/2]||null,scoreA:sfRows[i].scores,scoreB:sfRows[i+1].scores});
+      for(let c=7;c<40;c++){const v=norm(cupGrid.get(rr,c)); if(v&&/[A-Za-z]/.test(v)&&c>champCol){champ=v;champCol=c;}} }
+    for(let i=0;i+1<sfRows.length;i+=2) bracket.semifinals.push({a:sfRows[i].name,b:sfRows[i+1].name,winner:winners[i/2]||null,scoreA:sfRows[i].scores,scoreB:sfRows[i+1].scores});
     bracket.champion=champ;
   }
 
   const cupMatches=parseCupMatches(wb);
   let teamMap=null;
 
-  // --- stagioni "vecchio stile": Coppa (e a volte Campionato) usano i NOMI-SQUADRA ---
-  // Ricostruisci sempre dal calendario (nomi allenatore), poi decidi se serve rimappare.
-  const TK=s=>String(s==null?'':s).toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Z0-9]/g,'');
+  // ricostruzione dal calendario (nomi allenatore) e mappa squadra->allenatore
   let recon=[];
   if(cupMatches.length){ const tab={};
     cupMatches.forEach(m=>{ if(m.gh==null||m.ga==null)return;
@@ -343,17 +329,17 @@ function parseClassifiche(wb){
     const used=new Set(), t2m={};
     cup.forEach(ts=>{const m=recon.find(r=>!used.has(r.canon)&&r.points===ts.points&&r.w===ts.w&&r.d===ts.d&&r.l===ts.l); if(m){t2m[TK(ts.name)]=m.canon;used.add(m.canon);}});
     cup.forEach(ts=>{if(t2m[TK(ts.name)])return; const m=recon.find(r=>!used.has(r.canon)&&r.points===ts.points&&r.gf===ts.gf&&r.gs===ts.gs); if(m){t2m[TK(ts.name)]=m.canon;used.add(m.canon);}});
-    const remT=cup.filter(ts=>!t2m[TK(ts.name)]), remM=recon.filter(r=>!used.has(r.canon));
-    if(remT.length===1&&remM.length===1){t2m[TK(remT[0].name)]=remM[0].canon;}
+    // coppie residue: appaia per ordine di punti (poi differenza reti)
+    const remT=cup.filter(ts=>!t2m[TK(ts.name)]).sort((a,b)=>b.points-a.points||(b.gf-b.gs)-(a.gf-a.gs));
+    const remM=recon.filter(r=>!used.has(r.canon)).sort((a,b)=>b.points-a.points||(b.gf-b.gs)-(a.gf-a.gs));
+    for(let i=0;i<remT.length&&i<remM.length;i++){ t2m[TK(remT[i].name)]=remM[i].canon; used.add(remM[i].canon); }
     teamMap=t2m;
     cup.length=0;
     recon.forEach(r=>cup.push({canon:r.canon,name:r.canon,points:r.points,gf:r.gf,gs:r.gs,dr:r.gf-r.gs,w:r.w,d:r.d,l:r.l}));
-    // match squadra->allenatore anche per prefisso (abbreviazioni tipo "TIGNUSI P.")
     const keys=Object.keys(t2m);
     const mapK=k=>{ const K=TK(k); if(t2m[K])return t2m[K]; let best=null; keys.forEach(tk=>{ const n=Math.min(tk.length,K.length); if(n>=5&&(tk.startsWith(K)||K.startsWith(tk)||tk.slice(0,6)===K.slice(0,6)))best=best||t2m[tk]; }); return best; };
     const rm=nm=>{ if(nm==null)return nm; return mapK(nm)||nm; };
     if(bracket){ bracket.champion=rm(bracket.champion); (bracket.semifinals||[]).forEach(s=>{ s.a=rm(s.a); s.b=rm(s.b); s.winner=rm(s.winner); }); }
-    // rietichetta il CAMPIONATO se usa nomi-squadra
     if(Object.keys(scores).some(k=>mapK(k))){
       const ns={},nd={},nt={};
       Object.keys(scores).forEach(k=>{ const mgr=mapK(k)||k; ns[mgr]=scores[k]; nd[mgr]=mgr; nt[mgr]=totals[k]; });
@@ -362,7 +348,6 @@ function parseClassifiche(wb){
       Object.keys(display).forEach(k=>delete display[k]); Object.assign(display,nd);
     }
   }
-  // stagioni senza Final Four: campione = 1ª della classifica Coppa
   if(bracket && !bracket.champion && cup.length) bracket.champion=cup[0].name;
 
   const order=Object.keys(scores).sort((a,b)=>(totals[b]||0)-(totals[a]||0));
@@ -372,69 +357,44 @@ function parseClassifiche(wb){
 }
 
 function parseRose(wb){
-  const ws=wb.Sheets[findAstaSheet(wb)]; const g=sheetToGrid(ws);
-  // colonna ruoli (layout "etichettato", 2018/19 in poi)
+  const g=sheetToGrid(wb.Sheets[findAstaSheet(wb)]);
   let roleCol=null;
-  for(let c=g.maxC;c>=1;c--){ let found=false;
-    for(let r=3;r<40;r++){const v=norm(g.get(r,c)); if(v&&ROLES.includes(v.split(' ')[0])){found=true;break;}}
-    if(found){roleCol=c;break;}
-  }
-  // colonna "NOME ALLENATORE" (se presente)
+  for(let c=g.maxC;c>=1;c--){ let f=false; for(let r=3;r<40;r++){const v=norm(g.get(r,c)); if(v&&ROLES.includes(v.split(' ')[0])){f=true;break;}} if(f){roleCol=c;break;} }
   let labelCol=null; for(let c=1;c<=g.maxC;c++){const v=norm(g.get(1,c)); if(v&&/nome allenatore/i.test(v)){labelCol=c;break;}}
-  // allenatori: passo 2 da col1, stop al primo vuoto/etichetta (esclude colonne-nota tipo AGOSTO)
-  const managers=[];
-  for(let c=1;c<=g.maxC;c+=2){
-    if(labelCol&&c>=labelCol) break;
-    const nm=norm(g.get(1,c)); if(!nm) break;
-    if(/nome allenatore/i.test(nm)) break;
-    managers.push({col:c,name:nm,canon:canon(nm),team:norm(g.get(2,c))});
-  }
+  const managers=[]; for(let c=1;c<=g.maxC;c+=2){ if(labelCol&&c>=labelCol) break; const nm=norm(g.get(1,c)); if(!nm) break; if(/nome allenatore/i.test(nm)) break;
+    const row2=norm(g.get(2,c)); const team=(row2&&isNaN(+row2))?row2:nm; managers.push({col:c,name:nm,canon:canon(nm),team}); }
   if(!managers.length) throw new Error('Nessun allenatore trovato nel Foglio Asta');
   if(roleCol){
-    // layout ETICHETTATO: ruoli dalla colonna etichette (qualsiasi composizione)
     return managers.map(mg=>{ const players=[];
-      for(let r=3;r<40;r++){ const lab=norm(g.get(r,roleCol)); if(!lab)continue;
-        const role=lab.split(' ')[0]; if(!ROLES.includes(role))continue;
-        const pn=cleanPlayer(g.get(r,mg.col)); const pr=num(g.get(r,mg.col+1));
-        if(pn)players.push({role,player:pn,price:pr});
-      }
-      return {canon:mg.canon,name:mg.name,team:mg.team,players};
-    });
+      for(let r=3;r<40;r++){ const lab=norm(g.get(r,roleCol)); if(!lab)continue; const role=lab.split(' ')[0]; if(!ROLES.includes(role))continue;
+        const pn=cleanPlayer(g.get(r,mg.col)); const pr=num(g.get(r,mg.col+1)); if(pn)players.push({role,player:pn,price:pr}); }
+      return {canon:mg.canon,name:mg.name,team:mg.team,players}; });
   }
-  // layout POSIZIONALE (2017/18 e precedenti): nessuna etichetta, ruoli per posizione
-  let startRow=null;
-  for(let r=2;r<=g.maxR;r++){ if(cleanPlayer(g.get(r,managers[0].col))){startRow=r;break;} }
+  let startRow=null; for(let r=2;r<=g.maxR;r++){ if(cleanPlayer(g.get(r,managers[0].col))){startRow=r;break;} }
   if(startRow==null) throw new Error('Rose non trovate nel Foglio Asta');
-  let count=0;
-  for(let r=startRow;r<=g.maxR;r++){ const v=cleanPlayer(g.get(r,managers[0].col)); if(!v||v.toUpperCase()==='DELTA')break; count++; }
-  const comp=ROSTER_TEMPLATES[count];
-  if(!comp) throw new Error('Composizione rosa non riconosciuta ('+count+' giocatori). Formati noti: 25 (3-8-8-6) o 28 (3-9-9-7).');
+  let count=0; for(let r=startRow;r<=g.maxR;r++){ const v=cleanPlayer(g.get(r,managers[0].col)); if(!v||v.toUpperCase()==='DELTA')break; count++; }
+  const comp=ROSTER_TEMPLATES[count]; if(!comp) throw new Error('Composizione rosa non riconosciuta ('+count+' giocatori).');
   const roleSeq=[]; ROLES.forEach((role,i)=>{ for(let k=0;k<comp[i];k++)roleSeq.push(role); });
   return managers.map(mg=>{ const players=[];
-    for(let i=0;i<count;i++){ const pn=cleanPlayer(g.get(startRow+i,mg.col)); const pr=num(g.get(startRow+i,mg.col+1));
-      if(pn)players.push({role:roleSeq[i],player:pn,price:pr}); }
-    return {canon:mg.canon,name:mg.name,team:mg.team,players};
-  });
+    for(let i=0;i<count;i++){ const pn=cleanPlayer(g.get(startRow+i,mg.col)); const pr=num(g.get(startRow+i,mg.col+1)); if(pn)players.push({role:roleSeq[i],player:pn,price:pr}); }
+    return {canon:mg.canon,name:mg.name,team:mg.team,players}; });
 }
 
 async function readWorkbook(file){ const buf=await file.arrayBuffer(); return XLSX.read(buf,{type:'array'}); }
 
 function buildSeason(clsWb,roseWb){
   const cls=parseClassifiche(clsWb); let rosters=parseRose(roseWb);
-  // stagioni "vecchio stile": le rose usano i nomi-squadra -> rimappa all'allenatore
   if(cls.teamMap){ const t2m=cls.teamMap, keys=Object.keys(t2m);
-    const TK=s=>String(s==null?'':s).toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Z0-9]/g,'');
     const mapK=k=>{ const K=TK(k); if(t2m[K])return t2m[K]; let best=null; keys.forEach(tk=>{ const n=Math.min(tk.length,K.length); if(n>=5&&(tk.startsWith(K)||K.startsWith(tk)||tk.slice(0,6)===K.slice(0,6)))best=best||t2m[tk]; }); return best; };
     rosters=rosters.map(r=>{ const mgr=mapK(r.team||r.name||r.canon); return mgr?{...r,canon:mgr}:r; });
   }
-  // prezzi d'asta validi solo se numerici, non negativi e densi; altrimenti sono bonus/malus -> ignora
   let np=0, neg=0, tot=0;
   rosters.forEach(r=>r.players.forEach(p=>{ tot++; if(typeof p.price==='number'){ np++; if(p.price<0)neg++; } }));
   const hasPrices = tot>0 && neg===0 && np>=tot*0.8;
   if(!hasPrices) rosters.forEach(r=>r.players.forEach(p=>{ p.price=null; }));
   const teamByCanon={}; rosters.forEach(r=>teamByCanon[r.canon]=r.team);
   const managers=Object.keys(cls.championship.scores).map(k=>({canon:k,name:cls._display[k],team:teamByCanon[k]||null}));
-  const season={season:cls.season,giornate:cls.giornate,managers,championship:cls.championship,cup:cls.cup,rosters,hasPrices,importedAt:new Date().toISOString()};
+  const season={season:cls.season,giornate:cls.giornate,managers,championship:cls.championship,cup:cls.cup,rosters,hasPrices};
   delete season.championship._display; return season;
 }
 function analyzeSeason(s){
@@ -683,5 +643,4 @@ async function boot(){
 boot();
 </script>
 </body>
-</html>
 </html>
