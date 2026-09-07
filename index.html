@@ -216,7 +216,7 @@ function parseCupMatches(wb){
 
 function parseClassifiche(wb){
   const ws=wb.Sheets[findChampSheet(wb)]; const g=sheetToGrid(ws);
-  const title=norm(g.get(1,1))||''; const sm=title.match(/(\d{4}\/\d{2})/); const season=sm?sm[1]:null;
+  const title=norm(g.get(1,1))||''; const sm=title.match(/(\d{4})\s*[\/-]\s*(\d{2})/); const season=sm?(sm[1]+'/'+sm[2]):null;
   let hdr=null; for(let r=1;r<=25;r++){ if(g.get(r,2)===1&&g.get(r,3)===2){hdr=r;break;} }
   if(!hdr) throw new Error('Riga giornate campionato non trovata');
   let tot=null; for(let c=2;c<=90;c++){ if(norm(g.get(hdr,c))==='TOTAL'){tot=c;break;} }
