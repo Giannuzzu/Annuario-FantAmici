@@ -159,7 +159,7 @@ const EMBEDDED_SEASONS=[{"season":"2025/26","giornate":38,"managers":[{"canon":"
 const ROLES=['POR','DIF','CEN','ATT'];
 const ROSTER_TEMPLATES={25:[3,8,8,6],26:[3,8,8,7],28:[3,9,9,7]}; // giocatori per ruolo nei file storici SENZA colonna ruoli
 const ROLE_LABEL={POR:'Portieri',DIF:'Difensori',CEN:'Centrocampisti',ATT:'Attaccanti'};
-const NAME_ALIAS={'PEPPE':'GREG','GIUSEPPE':'GREG','MIMMO':'DOMENICO','STE & GIANM':'STE & GIANMARCO','ALESSIO & MAX':'ALE & MAX','MARIO & AME':'MARIO & AMEDEO','MARCO S':'SANTORO','MARCO D':'MARCO','CLAUDIO & STE':'CLAUDIO & STEFANO','MILLY':'GIANMARCO'}; // allenatori rinominati/abbreviati negli anni: stessa persona (nome finale unificato)
+const NAME_ALIAS={'PEPPE':'GREG','GIUSEPPE':'GREG','MIMMO':'DOMENICO','STE & GIANM':'STE & GIANMARCO','ALESSIO & MAX':'ALE & MAX','MARIO & AME':'MARIO & AMEDEO','MARCO S':'SANTORO','MARCO D':'MARCO','CLAUDIO & STE':'CLAUDIO & STEFANO','MILLY':'GIANMARCO','CLA & STE':'CLAUDIO & STEFANO'}; // allenatori rinominati/abbreviati negli anni: stessa persona (nome finale unificato)
 const state={seasons:{}, current:null, tab:'riepilogo', pendingImport:null};
 
 const norm=v=>{ if(v==null) return null; const s=String(v).trim(); return s===''?null:s; };
