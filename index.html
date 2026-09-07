@@ -159,7 +159,7 @@ const EMBEDDED_SEASONS=[{"season":"2025/26","giornate":38,"managers":[{"canon":"
 const ROLES=['POR','DIF','CEN','ATT'];
 const ROSTER_TEMPLATES={25:[3,8,8,6],26:[3,8,8,7],28:[3,9,9,7]}; // giocatori per ruolo nei file storici SENZA colonna ruoli
 const ROLE_LABEL={POR:'Portieri',DIF:'Difensori',CEN:'Centrocampisti',ATT:'Attaccanti'};
-const NAME_ALIAS={'PEPPE':'GREG','GIUSEPPE':'GREG','MIMMO':'DOMENICO','STE & GIANM':'STE & GIANMARCO','ALESSIO & MAX':'ALE & MAX','MARIO & AME':'MARIO & AMEDEO','MARCO S':'SANTORO','MARCO D':'MARCO','CLAUDIO & STE':'CLAUDIO & STEFANO'}; // allenatori rinominati/abbreviati negli anni: stessa persona (nome finale unificato)
+const NAME_ALIAS={'PEPPE':'GREG','GIUSEPPE':'GREG','MIMMO':'DOMENICO','STE & GIANM':'STE & GIANMARCO','ALESSIO & MAX':'ALE & MAX','MARIO & AME':'MARIO & AMEDEO','MARCO S':'SANTORO','MARCO D':'MARCO','CLAUDIO & STE':'CLAUDIO & STEFANO','MILLY':'GIANMARCO'}; // allenatori rinominati/abbreviati negli anni: stessa persona (nome finale unificato)
 const state={seasons:{}, current:null, tab:'riepilogo', pendingImport:null};
 
 const norm=v=>{ if(v==null) return null; const s=String(v).trim(); return s===''?null:s; };
@@ -253,11 +253,16 @@ function parseClassifiche(wb){
   if(cr){
     // riga intestazione: la prima dopo "CUP STANDING" che contiene "Points"
     let chdr=null;
-    for(let r=cr+1;r<=cr+5&&!chdr;r++){ for(let c=1;c<=40;c++){ const h=norm(g.get(r,c)); if(h==='Points'||h==='P'){chdr=r;break;} } }
+    for(let r=cr+1;r<=cr+5&&!chdr;r++){ for(let c=1;c<=40;c++){ const h=norm(g.get(r,c)); if(h&&/^(points|punti|p)$/i.test(h)){chdr=r;break;} } }
     const cmap={};
     if(chdr){ for(let c=1;c<=40;c++){ const lab=norm(g.get(chdr,c)); if(!lab)continue; const L=lab.toUpperCase();
-      if(L==='POINTS'||L==='P')cmap.points=c; else if(L==='GF')cmap.gf=c; else if(L==='GS')cmap.gs=c;
-      else if(L.indexOf('DR')===0)cmap.dr=c; else if(L==='W')cmap.w=c; else if(L==='D')cmap.d=c; else if(L==='L')cmap.l=c; } }
+           if(/^(POINTS|PUNTI|P)$/.test(L))cmap.points=c;
+      else if(/^(GF|GOL FATTI)$/.test(L))cmap.gf=c;
+      else if(/^(GS|GOL SUBITI)$/.test(L))cmap.gs=c;
+      else if(/^(W|WIN)$/.test(L))cmap.w=c;
+      else if(/^(D|DRAW)$/.test(L))cmap.d=c;
+      else if(/^(L|LOSE)$/.test(L))cmap.l=c;
+      else if(L==='DR'||L==='DR ±'||/^DIFF/.test(L))cmap.dr=c;
     const rv=(rr,key)=>{ const c=cmap[key]; if(!c)return null; let v=g.get(rr,c); if(v==null)v=g.get(rr,c+1); return v; };
     let rr=(chdr||cr+2)+1;
     while(true){ const nm=norm(g.get(rr,1)); let pts=num(rv(rr,'points')); if(!nm||pts==null)break;
@@ -282,7 +287,31 @@ function parseClassifiche(wb){
         scoreA:sfRows[i].scores,scoreB:sfRows[i+1].scores});
     bracket.champion=champ;
   }
-  return {season,giornate:G,championship:{finalStanding,scores},cup:{standing:cup,matches:parseCupMatches(wb),bracket},_display:display};
+    // --- Stagioni "vecchio stile": la Coppa usa nomi-squadra. Ricostruisci dal calendario. ---
+  const cupMatches=parseCupMatches(wb); // già calcolato sotto; se serve, sposta la sua chiamata qui sopra
+  const mgrSet=new Set(Object.keys(scores)); // canon degli allenatori (campionato)
+  const stdInMgr=cup.filter(c=>mgrSet.has(c.canon)).length;
+  if(cup.length && stdInMgr < cup.length/2 && cupMatches.length){
+    // ricostruisci classifica dai match (nomi allenatore)
+    const tab={};
+    cupMatches.forEach(m=>{ if(m.gh==null||m.ga==null)return;
+      [[m.homeCanon,m.gh,m.ga],[m.awayCanon,m.ga,m.gh]].forEach(([cn,gf,gs])=>{const t=tab[cn]||(tab[cn]={canon:cn,points:0,gf:0,gs:0,w:0,d:0,l:0});t.gf+=gf;t.gs+=gs;if(gf>gs){t.points+=3;t.w++;}else if(gf===gs){t.points++;t.d++;}else t.l++;});});
+    const recon=Object.values(tab).sort((a,b)=>b.points-a.points||(b.gf-b.gs)-(a.gf-a.gs));
+    // mappa squadra->allenatore per punti/W-D-L, poi per gol, poi per esclusione
+    const used=new Set(), t2m={}, K=ts=>ts.name.toUpperCase().trim();
+    cup.forEach(ts=>{const m=recon.find(r=>!used.has(r.canon)&&r.points===ts.points&&r.w===ts.w&&r.d===ts.d&&r.l===ts.l); if(m){t2m[K(ts)]=m.canon;used.add(m.canon);}});
+    cup.forEach(ts=>{if(t2m[K(ts)])return; const m=recon.find(r=>!used.has(r.canon)&&r.points===ts.points&&r.gf===ts.gf&&r.gs===ts.gs); if(m){t2m[K(ts)]=m.canon;used.add(m.canon);}});
+    const remT=cup.filter(ts=>!t2m[K(ts)]), remM=recon.filter(r=>!used.has(r.canon));
+    if(remT.length===1&&remM.length===1){t2m[K(remT[0])]=remM[0].canon;}
+    // sostituisci la classifica Coppa con quella ricostruita (nomi allenatore)
+    cup.length=0;
+    recon.forEach(r=>cup.push({canon:r.canon,name:r.canon,points:r.points,gf:r.gf,gs:r.gs,dr:r.gf-r.gs,w:r.w,d:r.d,l:r.l}));
+    // rimappa il tabellone (nomi-squadra -> allenatore)
+    const rm=nm=>{ const k=nm?String(nm).toUpperCase().trim():nm; return t2m[k]||nm; };
+    if(bracket){ bracket.champion=rm(bracket.champion);
+      (bracket.semifinals||[]).forEach(s=>{ s.a=rm(s.a); s.b=rm(s.b); s.winner=rm(s.winner); }); }
+  }
+             return {season,giornate:G,championship:{finalStanding,scores},cup:{standing:cup,matches:parseCupMatches(wb),bracket},_display:display};
 }
 
 function parseRose(wb){
