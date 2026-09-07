@@ -159,7 +159,7 @@ const EMBEDDED_SEASONS=[{"season":"2025/26","giornate":38,"managers":[{"canon":"
 const ROLES=['POR','DIF','CEN','ATT'];
 const ROSTER_TEMPLATES={25:[3,8,8,6],26:[3,8,8,7],28:[3,9,9,7]}; // giocatori per ruolo nei file storici SENZA colonna ruoli
 const ROLE_LABEL={POR:'Portieri',DIF:'Difensori',CEN:'Centrocampisti',ATT:'Attaccanti'};
-const NAME_ALIAS={'PEPPE':'GREG','GIUSEPPE':'GREG','ALESSIO & MAX':'ALE & MAX','MARIO & AME':'MARIO & AMEDEO','MARCO S':'SANTORO','MARCO D':'MARCO','CLAUDIO & STE':'CLAUDIO & STEFANO'}; // allenatori rinominati/abbreviati negli anni: stessa persona (nome finale unificato)
+const NAME_ALIAS={'PEPPE':'GREG','GIUSEPPE':'GREG','MIMMO':'DOMENICO','STE & GIANM':'STE & GIANMARCO','ALESSIO & MAX':'ALE & MAX','MARIO & AME':'MARIO & AMEDEO','MARCO S':'SANTORO','MARCO D':'MARCO','CLAUDIO & STE':'CLAUDIO & STEFANO'}; // allenatori rinominati/abbreviati negli anni: stessa persona (nome finale unificato)
 const state={seasons:{}, current:null, tab:'riepilogo', pendingImport:null};
 
 const norm=v=>{ if(v==null) return null; const s=String(v).trim(); return s===''?null:s; };
@@ -193,6 +193,23 @@ function parseCupMatches(wb){
   let isB=false;
   for(let r=1;r<=Math.min(g.maxR,8)&&!isB;r++) for(let c=1;c<=g.maxC;c++){ if(norm(g.get(r,c))==='-'){isB=true;break;} }
   const out=[];
+    // Formato C: sfida unita in una cella "CASA-OSPITE" + 2 celle punteggio (andata/ritorno)
+  let isC=false;
+  for(let r=1;r<=Math.min(g.maxR,12)&&!isC;r++) for(let c=1;c<=g.maxC;c++){ const v=norm(g.get(r,c));
+    if(v&&/[A-Za-z].*-.*[A-Za-z]/.test(v)&&!/^\s*\d/.test(v)&&v.split('-').length>=2){ const sc=parseScore(g.get(r,c+1)); if(sc[0]!=null){isC=true;break;} } }
+  if(isC){
+    for(let r=1;r<=g.maxR;r++) for(let c=1;c<=g.maxC;c++){ const v=norm(g.get(r,c));
+      if(!v||!v.includes('-')||/^\s*\d/.test(v)) continue;
+      const parts=v.split('-'); if(parts.length<2) continue;
+      const away=parts.pop().trim(); const home=parts.join('-').trim();
+      if(!(/[A-Za-z]/.test(home)&&/[A-Za-z]/.test(away))) continue;
+      const [a1,a2]=parseScore(g.get(r,c+1)); const [r1,r2]=parseScore(g.get(r,c+2));
+      if(a1==null&&r1==null) continue;
+      if(a1!=null) out.push({md:null,home,homeCanon:canon(home),away,awayCanon:canon(away),gh:a1,ga:a2});
+      if(r1!=null) out.push({md:null,home:away,homeCanon:canon(away),away:home,awayCanon:canon(home),gh:r2,ga:r1});
+    }
+    return out;
+  }
   if(isB){
     const mdLabel=(r,c)=>{ for(let rr=r;rr>=1;rr--){ const v=norm(g.get(rr,c-2)); if(v&&/^\d+\s*-\s*\d+/.test(v)){ const m=v.match(/\d+/g); return [+m[0],+m[1]]; } } return [null,null]; };
     for(let r=1;r<=g.maxR;r++) for(let c=1;c<=g.maxC;c++){
@@ -231,15 +248,15 @@ function parseClassifiche(wb){
   const order=Object.keys(scores).sort((a,b)=>(totals[b]||0)-(totals[a]||0));
   const finalStanding=order.map((k,i)=>({pos:i+1,canon:k,name:display[k],total:totals[k]}));
   // cup standing (robusto: mappa le colonne dalle intestazioni Points/GF/GS/DR/W/D/L)
-  let cr=null; for(let rr=1;rr<=90;rr++){const v=norm(g.get(rr,1)); if(v&&/^cup standing/i.test(v)){cr=rr;break;}}
+    let cr=null; for(let rr=1;rr<=90;rr++){const v=norm(g.get(rr,1)); if(v&&/^(cup standing|classifica coppa)/i.test(v)){cr=rr;break;}}
   const cup=[];
   if(cr){
     // riga intestazione: la prima dopo "CUP STANDING" che contiene "Points"
     let chdr=null;
-    for(let r=cr+1;r<=cr+5&&!chdr;r++){ for(let c=1;c<=40;c++){ if(norm(g.get(r,c))==='Points'){chdr=r;break;} } }
+    for(let r=cr+1;r<=cr+5&&!chdr;r++){ for(let c=1;c<=40;c++){ const h=norm(g.get(r,c)); if(h==='Points'||h==='P'){chdr=r;break;} } }
     const cmap={};
     if(chdr){ for(let c=1;c<=40;c++){ const lab=norm(g.get(chdr,c)); if(!lab)continue; const L=lab.toUpperCase();
-      if(L==='POINTS')cmap.points=c; else if(L==='GF')cmap.gf=c; else if(L==='GS')cmap.gs=c;
+      if(L==='POINTS'||L==='P')cmap.points=c; else if(L==='GF')cmap.gf=c; else if(L==='GS')cmap.gs=c;
       else if(L.indexOf('DR')===0)cmap.dr=c; else if(L==='W')cmap.w=c; else if(L==='D')cmap.d=c; else if(L==='L')cmap.l=c; } }
     const rv=(rr,key)=>{ const c=cmap[key]; if(!c)return null; let v=g.get(rr,c); if(v==null)v=g.get(rr,c+1); return v; };
     let rr=(chdr||cr+2)+1;
@@ -250,7 +267,7 @@ function parseClassifiche(wb){
     }
   }
   // final four bracket (flexible: scores from cols 2..5; champion = rightmost alphabetic text)
-  let ffr=null; for(let rr=1;rr<=90;rr++){const v=norm(g.get(rr,1)); if(v&&/^final four/i.test(v)){ffr=rr;break;}}
+  let ffr=null; for(let rr=1;rr<=90;rr++){const v=norm(g.get(rr,1)); if(v&&/^(final four|fase finale)/i.test(v)){ffr=rr;break;}}
   const bracket={semifinals:[],champion:null};
   if(ffr){ const sfRows=[],winners=[]; let champ=null,champCol=-1;
     for(let rr=ffr+1;rr<ffr+16;rr++){
