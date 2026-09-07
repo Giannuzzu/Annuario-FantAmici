@@ -263,7 +263,8 @@ function parseClassifiche(wb){
       else if(/^(D|DRAW)$/.test(L))cmap.d=c;
       else if(/^(L|LOSE)$/.test(L))cmap.l=c;
       else if(L==='DR'||L==='DR ±'||/^DIFF/.test(L))cmap.dr=c;
-    const rv=(rr,key)=>{ const c=cmap[key]; if(!c)return null; let v=g.get(rr,c); if(v==null)v=g.get(rr,c+1); return v; };
+} }
+const rv=(rr,key)=>{ const c=cmap[key]; if(!c)return null; let v=g.get(rr,c); if(v==null)v=g.get(rr,c+1); return v; };
     let rr=(chdr||cr+2)+1;
     while(true){ const nm=norm(g.get(rr,1)); let pts=num(rv(rr,'points')); if(!nm||pts==null)break;
       const drRaw=rv(rr,'dr'); const dr=num(drRaw)!=null?num(drRaw):(drRaw!=null&&drRaw!==''?parseInt(String(drRaw).replace('+',''),10):null);
