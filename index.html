@@ -181,10 +181,15 @@ const DB={ _db:null,
 /* ---------- PARSER ---------- */
 function sheetToGrid(ws){ const ref=XLSX.utils.decode_range(ws['!ref']);
   return {maxR:ref.e.r+1,maxC:ref.e.c+1,get(r,c){const cell=ws[XLSX.utils.encode_cell({r:r-1,c:c-1})];return cell?cell.v:null;}}; }
-const findChampSheet=wb=>wb.SheetNames.find(s=>/classifica campionato/i.test(s))||wb.SheetNames.find(s=>/classifica/i.test(s)&&!/coppa/i.test(s))||wb.SheetNames.find(s=>/classifica/i.test(s))||wb.SheetNames[0];
-const findCupSheet=wb=>wb.SheetNames.find(s=>/classifica coppa/i.test(s));
+const findChampSheet=wb=>{
+  const withYear=wb.SheetNames.find(s=>{const c=wb.Sheets[s]&&wb.Sheets[s]['A1']; const a=c?String(c.v).trim():''; return /\d{4}\s*[\/-]\s*\d{2}/.test(a);});
+  if(withYear) return withYear;
+  return wb.SheetNames.find(s=>/classifica campionato/i.test(s))||wb.SheetNames.find(s=>/classifica/i.test(s)&&!/coppa/i.test(s))||wb.SheetNames.find(s=>/classifica/i.test(s))||wb.SheetNames[0];
+};
+const findCupSheet=(wb,exclude)=>wb.SheetNames.find(s=>s!==exclude&&/classifica (coppa|campionato)/i.test(s))||wb.SheetNames.find(s=>s!==exclude&&/coppa/i.test(s)&&/classifica/i.test(s));
 const findCalendarSheet=wb=>wb.SheetNames.find(s=>/calendario/i.test(s));
-const findAstaSheet=wb=>wb.SheetNames.find(s=>/asta/i.test(s))||wb.SheetNames[0];
+const findAstaSheet=wb=>wb.SheetNames.find(s=>/asta/i.test(s))||wb.SheetNames.find(s=>/agosto/i.test(s))||wb.SheetNames[0];
+const cleanPlayer=p=>{ if(p==null)return null; let s=String(p).trim().replace(/[\*\[\]]+/g,' ').replace(/\s+/g,' ').trim(); return s||null; };
 const parseScore=s=>{ s=norm(s); if(!s)return[null,null]; const m=String(s).match(/(\d+)\s*-\s*(\d+)/); return m?[+m[1],+m[2]]:[null,null]; };
 
 function parseCupMatches(wb){
@@ -233,7 +238,8 @@ function parseCupMatches(wb){
 }
 
 function parseClassifiche(wb){
-  const g=sheetToGrid(wb.Sheets[findChampSheet(wb)]);
+  const champSheet=findChampSheet(wb);
+  const g=sheetToGrid(wb.Sheets[champSheet]);
   const title=norm(g.get(1,1))||''; const sm=title.match(/(\d{4})\s*[\/-]\s*(\d{2})/); const season=sm?(sm[1]+'/'+sm[2]):null;
 
   const scores={},display={},totals={}; let G=0;
@@ -271,14 +277,11 @@ function parseClassifiche(wb){
     else { mgrs.forEach(m=>{ const cn=canon(m.name); totals[cn]=scores[cn].reduce((a,b)=>a+(b||0),0); }); }
   }
 
-  const order=Object.keys(scores).sort((a,b)=>(totals[b]||0)-(totals[a]||0));
-  const finalStanding=order.map((k,i)=>({pos:i+1,canon:k,name:display[k],total:totals[k]}));
-
   // --- classifica Coppa: prima nel foglio campionato, altrimenti nel foglio "Classifica Coppa" ---
   let cupGrid=g, cr=null;
   for(let rr=1;rr<=90;rr++){const v=norm(g.get(rr,1)); if(v&&/^(cup standing|classifica coppa)/i.test(v)){cr=rr;break;}}
-  if(cr==null){ const cs=findCupSheet(wb); if(cs){ cupGrid=sheetToGrid(wb.Sheets[cs]);
-    for(let rr=1;rr<=90;rr++){const v=norm(cupGrid.get(rr,1)); if(v&&/^(cup standing|classifica coppa)/i.test(v)){cr=rr;break;}} } }
+  if(cr==null){ const cs=findCupSheet(wb,champSheet); if(cs){ cupGrid=sheetToGrid(wb.Sheets[cs]);
+    for(let rr=1;rr<=90;rr++){const v=norm(cupGrid.get(rr,1)); if(v&&/^(cup standing|classifica coppa|classifica campionato)/i.test(v)){cr=rr;break;}} } }
   const cup=[];
   if(cr!=null){
     let chdr=null;
@@ -295,13 +298,14 @@ function parseClassifiche(wb){
       else if(L==='DR'||L==='DR ±'||/^DIFF/.test(L))cmap.dr=c;
     } }
     const rv=(rr,key)=>{ const c=cmap[key]; if(!c)return null; let v=cupGrid.get(rr,c); if(v==null)v=cupGrid.get(rr,c+1); return v; };
-    let rr=(chdr||cr+2)+1;
+    let rr=(chdr||cr+2)+1, blanks=0;
     while(rr<=cupGrid.maxR){ const nm=norm(cupGrid.get(rr,nameCol)); let pts=num(rv(rr,'points'));
-      if(nm&&pts!=null){
+      if(nm&&/^(final four|fase finale|cup standing|classifica)/i.test(nm)) break;
+      if(nm&&pts!=null){ blanks=0;
         const drRaw=rv(rr,'dr'); const dr=num(drRaw)!=null?num(drRaw):(drRaw!=null&&drRaw!==''?parseInt(String(drRaw).replace('+',''),10):null);
         cup.push({canon:canon(nm),name:nm,points:pts,gf:num(rv(rr,'gf')),gs:num(rv(rr,'gs')),dr,w:num(rv(rr,'w')),d:num(rv(rr,'d')),l:num(rv(rr,'l'))});
         rr++;
-      } else if(cup.length){ break; } else { rr++; }
+      } else if(cup.length){ blanks++; if(blanks>2)break; rr++; } else { rr++; }
     }
   }
 
@@ -322,29 +326,49 @@ function parseClassifiche(wb){
   }
 
   const cupMatches=parseCupMatches(wb);
+  let teamMap=null;
 
-  // --- stagioni "vecchio stile": Coppa a nomi-squadra -> ricostruisci dal calendario e mappa ---
-  const mgrSet=new Set(Object.keys(scores));
-  const stdInMgr=cup.filter(c=>mgrSet.has(c.canon)).length;
-  if(cup.length && stdInMgr < cup.length/2 && cupMatches.length){
-    const tab={};
+  // --- stagioni "vecchio stile": Coppa (e a volte Campionato) usano i NOMI-SQUADRA ---
+  // Ricostruisci sempre dal calendario (nomi allenatore), poi decidi se serve rimappare.
+  const TK=s=>String(s==null?'':s).toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Z0-9]/g,'');
+  let recon=[];
+  if(cupMatches.length){ const tab={};
     cupMatches.forEach(m=>{ if(m.gh==null||m.ga==null)return;
       [[m.homeCanon,m.gh,m.ga],[m.awayCanon,m.ga,m.gh]].forEach(([cn,gf,gs])=>{const t=tab[cn]||(tab[cn]={canon:cn,points:0,gf:0,gs:0,w:0,d:0,l:0});t.gf+=gf;t.gs+=gs;if(gf>gs){t.points+=3;t.w++;}else if(gf===gs){t.points++;t.d++;}else t.l++;});});
-    const recon=Object.values(tab).sort((a,b)=>b.points-a.points||(b.gf-b.gs)-(a.gf-a.gs));
-    const K=ts=>String(ts.name||ts).toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Z0-9]/g,'');
+    recon=Object.values(tab).sort((a,b)=>b.points-a.points||(b.gf-b.gs)-(a.gf-a.gs));
+  }
+  const reconKeys=new Set(recon.map(r=>TK(r.canon)));
+  const cupInRecon=cup.filter(c=>reconKeys.has(TK(c.name))).length;
+  if(cup.length && recon.length && cupInRecon < cup.length/2){
     const used=new Set(), t2m={};
-    cup.forEach(ts=>{const m=recon.find(r=>!used.has(r.canon)&&r.points===ts.points&&r.w===ts.w&&r.d===ts.d&&r.l===ts.l); if(m){t2m[K(ts)]=m.canon;used.add(m.canon);}});
-    cup.forEach(ts=>{if(t2m[K(ts)])return; const m=recon.find(r=>!used.has(r.canon)&&r.points===ts.points&&r.gf===ts.gf&&r.gs===ts.gs); if(m){t2m[K(ts)]=m.canon;used.add(m.canon);}});
-    const remT=cup.filter(ts=>!t2m[K(ts)]), remM=recon.filter(r=>!used.has(r.canon));
-    if(remT.length===1&&remM.length===1){t2m[K(remT[0])]=remM[0].canon;}
+    cup.forEach(ts=>{const m=recon.find(r=>!used.has(r.canon)&&r.points===ts.points&&r.w===ts.w&&r.d===ts.d&&r.l===ts.l); if(m){t2m[TK(ts.name)]=m.canon;used.add(m.canon);}});
+    cup.forEach(ts=>{if(t2m[TK(ts.name)])return; const m=recon.find(r=>!used.has(r.canon)&&r.points===ts.points&&r.gf===ts.gf&&r.gs===ts.gs); if(m){t2m[TK(ts.name)]=m.canon;used.add(m.canon);}});
+    const remT=cup.filter(ts=>!t2m[TK(ts.name)]), remM=recon.filter(r=>!used.has(r.canon));
+    if(remT.length===1&&remM.length===1){t2m[TK(remT[0].name)]=remM[0].canon;}
+    teamMap=t2m;
     cup.length=0;
     recon.forEach(r=>cup.push({canon:r.canon,name:r.canon,points:r.points,gf:r.gf,gs:r.gs,dr:r.gf-r.gs,w:r.w,d:r.d,l:r.l}));
-    const rm=nm=>{ if(nm==null)return nm; return t2m[K(nm)]||nm; };
-    if(bracket){ bracket.champion=rm(bracket.champion);
-      (bracket.semifinals||[]).forEach(s=>{ s.a=rm(s.a); s.b=rm(s.b); s.winner=rm(s.winner); }); }
+    // match squadra->allenatore anche per prefisso (abbreviazioni tipo "TIGNUSI P.")
+    const keys=Object.keys(t2m);
+    const mapK=k=>{ const K=TK(k); if(t2m[K])return t2m[K]; let best=null; keys.forEach(tk=>{ const n=Math.min(tk.length,K.length); if(n>=5&&(tk.startsWith(K)||K.startsWith(tk)||tk.slice(0,6)===K.slice(0,6)))best=best||t2m[tk]; }); return best; };
+    const rm=nm=>{ if(nm==null)return nm; return mapK(nm)||nm; };
+    if(bracket){ bracket.champion=rm(bracket.champion); (bracket.semifinals||[]).forEach(s=>{ s.a=rm(s.a); s.b=rm(s.b); s.winner=rm(s.winner); }); }
+    // rietichetta il CAMPIONATO se usa nomi-squadra
+    if(Object.keys(scores).some(k=>mapK(k))){
+      const ns={},nd={},nt={};
+      Object.keys(scores).forEach(k=>{ const mgr=mapK(k)||k; ns[mgr]=scores[k]; nd[mgr]=mgr; nt[mgr]=totals[k]; });
+      Object.keys(scores).forEach(k=>delete scores[k]); Object.assign(scores,ns);
+      Object.keys(totals).forEach(k=>delete totals[k]); Object.assign(totals,nt);
+      Object.keys(display).forEach(k=>delete display[k]); Object.assign(display,nd);
+    }
   }
+  // stagioni senza Final Four: campione = 1ª della classifica Coppa
+  if(bracket && !bracket.champion && cup.length) bracket.champion=cup[0].name;
 
-  return {season,giornate:G,championship:{finalStanding,scores},cup:{standing:cup,matches:cupMatches,bracket},_display:display};
+  const order=Object.keys(scores).sort((a,b)=>(totals[b]||0)-(totals[a]||0));
+  const finalStanding=order.map((k,i)=>({pos:i+1,canon:k,name:display[k],total:totals[k]}));
+
+  return {season,giornate:G,championship:{finalStanding,scores},cup:{standing:cup,matches:cupMatches,bracket},teamMap,_display:display};
 }
 
 function parseRose(wb){
@@ -371,7 +395,7 @@ function parseRose(wb){
     return managers.map(mg=>{ const players=[];
       for(let r=3;r<40;r++){ const lab=norm(g.get(r,roleCol)); if(!lab)continue;
         const role=lab.split(' ')[0]; if(!ROLES.includes(role))continue;
-        const pn=norm(g.get(r,mg.col)); const pr=num(g.get(r,mg.col+1));
+        const pn=cleanPlayer(g.get(r,mg.col)); const pr=num(g.get(r,mg.col+1));
         if(pn)players.push({role,player:pn,price:pr});
       }
       return {canon:mg.canon,name:mg.name,team:mg.team,players};
@@ -379,15 +403,15 @@ function parseRose(wb){
   }
   // layout POSIZIONALE (2017/18 e precedenti): nessuna etichetta, ruoli per posizione
   let startRow=null;
-  for(let r=3;r<=g.maxR;r++){ if(norm(g.get(r,managers[0].col))){startRow=r;break;} }
+  for(let r=2;r<=g.maxR;r++){ if(cleanPlayer(g.get(r,managers[0].col))){startRow=r;break;} }
   if(startRow==null) throw new Error('Rose non trovate nel Foglio Asta');
   let count=0;
-  for(let r=startRow;r<=g.maxR;r++){ const v=norm(g.get(r,managers[0].col)); if(!v||v.toUpperCase()==='DELTA')break; count++; }
+  for(let r=startRow;r<=g.maxR;r++){ const v=cleanPlayer(g.get(r,managers[0].col)); if(!v||v.toUpperCase()==='DELTA')break; count++; }
   const comp=ROSTER_TEMPLATES[count];
   if(!comp) throw new Error('Composizione rosa non riconosciuta ('+count+' giocatori). Formati noti: 25 (3-8-8-6) o 28 (3-9-9-7).');
   const roleSeq=[]; ROLES.forEach((role,i)=>{ for(let k=0;k<comp[i];k++)roleSeq.push(role); });
   return managers.map(mg=>{ const players=[];
-    for(let i=0;i<count;i++){ const pn=norm(g.get(startRow+i,mg.col)); const pr=num(g.get(startRow+i,mg.col+1));
+    for(let i=0;i<count;i++){ const pn=cleanPlayer(g.get(startRow+i,mg.col)); const pr=num(g.get(startRow+i,mg.col+1));
       if(pn)players.push({role:roleSeq[i],player:pn,price:pr}); }
     return {canon:mg.canon,name:mg.name,team:mg.team,players};
   });
@@ -396,10 +420,21 @@ function parseRose(wb){
 async function readWorkbook(file){ const buf=await file.arrayBuffer(); return XLSX.read(buf,{type:'array'}); }
 
 function buildSeason(clsWb,roseWb){
-  const cls=parseClassifiche(clsWb); const rosters=parseRose(roseWb);
+  const cls=parseClassifiche(clsWb); let rosters=parseRose(roseWb);
+  // stagioni "vecchio stile": le rose usano i nomi-squadra -> rimappa all'allenatore
+  if(cls.teamMap){ const t2m=cls.teamMap, keys=Object.keys(t2m);
+    const TK=s=>String(s==null?'':s).toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Z0-9]/g,'');
+    const mapK=k=>{ const K=TK(k); if(t2m[K])return t2m[K]; let best=null; keys.forEach(tk=>{ const n=Math.min(tk.length,K.length); if(n>=5&&(tk.startsWith(K)||K.startsWith(tk)||tk.slice(0,6)===K.slice(0,6)))best=best||t2m[tk]; }); return best; };
+    rosters=rosters.map(r=>{ const mgr=mapK(r.team||r.name||r.canon); return mgr?{...r,canon:mgr}:r; });
+  }
+  // prezzi d'asta validi solo se numerici, non negativi e densi; altrimenti sono bonus/malus -> ignora
+  let np=0, neg=0, tot=0;
+  rosters.forEach(r=>r.players.forEach(p=>{ tot++; if(typeof p.price==='number'){ np++; if(p.price<0)neg++; } }));
+  const hasPrices = tot>0 && neg===0 && np>=tot*0.8;
+  if(!hasPrices) rosters.forEach(r=>r.players.forEach(p=>{ p.price=null; }));
   const teamByCanon={}; rosters.forEach(r=>teamByCanon[r.canon]=r.team);
   const managers=Object.keys(cls.championship.scores).map(k=>({canon:k,name:cls._display[k],team:teamByCanon[k]||null}));
-  const season={season:cls.season,giornate:cls.giornate,managers,championship:cls.championship,cup:cls.cup,rosters,importedAt:new Date().toISOString()};
+  const season={season:cls.season,giornate:cls.giornate,managers,championship:cls.championship,cup:cls.cup,rosters,hasPrices,importedAt:new Date().toISOString()};
   delete season.championship._display; return season;
 }
 function analyzeSeason(s){
@@ -568,18 +603,23 @@ function renderRose(s){
   const head=el('div','card',`<h2>Rose iniziali · ${s.season}</h2><div class="sub">Formazioni all'asta. Nessuna ricerca per giocatore (nomi non uniformi tra stagioni).</div>`);
   const opts=`<option value="__all">Tutte le rose</option>`+s.rosters.map(r=>`<option value="${r.canon}">${r.name} — ${r.team||''}</option>`).join('');
   head.innerHTML+=`<div class="h2h-controls"><select id="rSel" class="sel" style="min-width:260px">${opts}</select></div>`;
-  const allp=[]; s.rosters.forEach(r=>r.players.forEach(p=>allp.push({...p,manager:r.name,team:r.team})));
-  const cur=el('div','card',`<h2>💰 Curiosità · Top 3 acquisti per ruolo</h2><div class="sub">Prezzi d'asta più alti nella stagione ${s.season}</div>`);
-  const cg=el('div','grid g4');
-  ROLES.forEach(role=>{ const top=allp.filter(p=>p.role===role&&typeof p.price==='number').sort((a,b)=>b.price-a.price).slice(0,3);
-    const box=el('div','kpi'); box.innerHTML=`<div class="l">${ROLE_LABEL[role]}</div>`+top.map((p,i)=>`<div class="pl"><span>${['🥇','🥈','🥉'][i]} ${p.player} <span class="hint">· ${p.manager}</span></span><span class="pr">${fmt(p.price)}</span></div>`).join(''); cg.append(box); });
-  cur.append(cg);
-  const grid=el('div','grid g3'); grid.id='rosterGrid'; view.append(head,cur,grid);
+  const hasPrices = s.hasPrices!==false && s.rosters.some(r=>r.players.some(p=>typeof p.price==='number'));
+  view.append(head);
+  if(hasPrices){
+    const allp=[]; s.rosters.forEach(r=>r.players.forEach(p=>allp.push({...p,manager:r.name,team:r.team})));
+    const cur=el('div','card',`<h2>💰 Curiosità · Top 3 acquisti per ruolo</h2><div class="sub">Prezzi d'asta più alti nella stagione ${s.season}</div>`);
+    const cg=el('div','grid g4');
+    ROLES.forEach(role=>{ const top=allp.filter(p=>p.role===role&&typeof p.price==='number').sort((a,b)=>b.price-a.price).slice(0,3);
+      const box=el('div','kpi'); box.innerHTML=`<div class="l">${ROLE_LABEL[role]}</div>`+top.map((p,i)=>`<div class="pl"><span>${['🥇','🥈','🥉'][i]} ${p.player} <span class="hint">· ${p.manager}</span></span><span class="pr">${fmt(p.price)}</span></div>`).join(''); cg.append(box); });
+    cur.append(cg); view.append(cur);
+  }
+  const grid=el('div','grid g3'); grid.id='rosterGrid'; view.append(grid);
   function card(r){ const byRole={POR:[],DIF:[],CEN:[],ATT:[]}; r.players.forEach(p=>byRole[p.role].push(p));
     const spent=r.players.reduce((a,p)=>a+(p.price||0),0); const c=el('div','roster');
     let h=`<h3>${r.name}</h3><div class="team">${r.team||''}</div>`;
-    ROLES.forEach(role=>{ h+=`<div class="rolehdr">${ROLE_LABEL[role]}</div>`+byRole[role].map(p=>`<div class="pl"><span>${p.player}</span><span class="pr">${fmt(p.price)}</span></div>`).join(''); });
-    h+=`<div class="foot"><span>Spesa totale</span><b style="color:var(--gold2)">${fmt(spent)}</b></div>`; c.innerHTML=h; return c; }
+    ROLES.forEach(role=>{ h+=`<div class="rolehdr">${ROLE_LABEL[role]}</div>`+byRole[role].map(p=>`<div class="pl"><span>${p.player}</span>${hasPrices?`<span class="pr">${fmt(p.price)}</span>`:''}</div>`).join(''); });
+    if(hasPrices) h+=`<div class="foot"><span>Spesa totale</span><b style="color:var(--gold2)">${fmt(spent)}</b></div>`;
+    c.innerHTML=h; return c; }
   function draw(){ const g=document.getElementById('rosterGrid'); g.innerHTML=''; const sel=document.getElementById('rSel').value;
     const list=sel==='__all'?s.rosters:s.rosters.filter(r=>r.canon===sel); g.className=sel==='__all'?'grid g3':'grid g2'; list.forEach(r=>g.append(card(r))); }
   document.getElementById('rSel').onchange=draw; draw();
@@ -643,4 +683,5 @@ async function boot(){
 boot();
 </script>
 </body>
+</html>
 </html>
